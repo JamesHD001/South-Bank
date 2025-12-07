@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>South Online Banking || Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef3f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #1F1B44;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #1F1B44;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #151136;
+    }
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-bottom: 15px;
+      display: none;
+    }
+    .back-home {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .back-home a button {
+      width: auto;
+      padding: 10px 20px;
+      background-color: #076145;
+      color: hsl(206, 33%, 96%);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .back-home a button:hover {
+      background-color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Login</h2>
+    <div class="error-message" id="error">Invalid Username or Password</div>
+    <form id="loginForm" autocomplete="off">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter Username" required autocomplete="off">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter Password" required autocomplete="off">
+
+      <button type="submit">Login</button>
+    </form>
+
+    <!-- Back Home Button -->
+    <div class="back-home">
+      <a href="../index.html">
+        <button type="button">Back Home</button>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent form from submitting
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (username === "Kayelynn" && password === "KayelynnWirth2026") {
+        // Store login state in session
+        sessionStorage.setItem("loggedIn", true);
+
+        // Try dashboard.html first; fallback to index.html if not found
+        fetch("../dashboard.html").then(response => {
+          if (response.ok) {
+            window.location.href = "../dashboard.html";
+          } else {
+            window.location.href = "../index.html";
+          }
+        });
+      } else {
+        document.getElementById("error").style.display = "block";
+      }
+    });
+  </script>
+
+</body>
+</html>

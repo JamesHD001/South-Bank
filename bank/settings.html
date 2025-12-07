@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef3f7;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    h2 {
+      text-align: center;
+      color: #0077b6;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #0077b6;
+      color: white;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #023e8a;
+    }
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      color: #0077b6;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Account Settings</h2>
+    <form action="update-settings.php" method="post">
+      <label for="full-name">Full Name</label>
+      <input type="text" id="full-name" name="full-name" placeholder="e.g. Keanu Charles Reeves" required />
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="e.g. keanu@example.com" required />
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" placeholder="e.g. +1 123 456 7890" required />
+
+      <label for="password">New Password</label>
+      <input type="password" id="password" name="password" placeholder="Leave blank to keep current password" />
+
+      <label for="notifications">Notification Preference</label>
+      <select id="notifications" name="notifications">
+        <option value="email">Email</option>
+        <option value="sms">SMS</option>
+        <option value="none">None</option>
+      </select>
+
+      <button type="submit">Save Settings</button>
+    </form>
+    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+  </div>
+</body>
+</html>
