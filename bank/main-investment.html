@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>South Bank — Investment Planner</title>
+    <style>
+        :root{
+            --bg:#0f1724; --card:#0b1220; --muted:#9aa7b2;
+            --accent:#2dd4bf; --accent-2:#60a5fa; --glass: rgba(255,255,255,0.04);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0; background:
+            linear-gradient(180deg,#071227 0%, #071933 50%, #04101a 100%);
+            color:#e6eef6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+            padding:32px; display:flex; justify-content:center; align-items:flex-start;
+        }
+        .container{width:100%;max-width:1100px}
+        header{
+            display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;
+        }
+        header h1{font-size:20px;margin:0;color:var(--accent)}
+        header p{margin:0;color:var(--muted);font-size:13px}
+        .grid{
+            display:grid;grid-template-columns:1fr 420px;gap:18px;
+        }
+        .card{
+            background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+            border:1px solid rgba(255,255,255,0.03);
+            border-radius:12px;padding:18px;box-shadow: 0 6px 18px rgba(3,7,18,0.6);
+        }
+        .hero{
+            padding:20px;border-radius:12px;background:
+            linear-gradient(90deg, rgba(45,212,191,0.06), rgba(96,165,250,0.04));
+            display:flex;align-items:center;justify-content:space-between;gap:16px;
+        }
+        .hero .left{flex:1}
+        .hero h2{margin:0 0 6px 0;font-size:18px}
+        .hero p{margin:0;color:var(--muted);font-size:13px}
+        .form-row{display:flex;gap:10px;margin-top:12px}
+        label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+        input[type="number"], select{
+            width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);
+            background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.08));
+            color:var(--accent-2);font-weight:600;
+        }
+        .small{width:140px}
+        .controls{display:flex;gap:8px;margin-top:12px}
+        button{
+            padding:10px 12px;border-radius:8px;border:0;background:var(--accent);
+            color:#00221b;font-weight:700;cursor:pointer;
+        }
+        button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+        .results{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+        .stat{flex:1;background:var(--glass);padding:12px;border-radius:10px;text-align:center}
+        .stat b{display:block;font-size:18px;color:var(--accent-2);margin-top:6px}
+        canvas{width:100%;height:220px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);display:block}
+        .legend{display:flex;gap:10px;align-items:center;margin-top:8px;color:var(--muted);font-size:13px}
+        .dot{width:10px;height:10px;border-radius:50%}
+        footer{margin-top:14px;color:var(--muted);font-size:13px}
+        @media (max-width:920px){
+            .grid{grid-template-columns:1fr;align-items:start}
+            header{flex-direction:column;align-items:flex-start;gap:8px}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>South Bank</h1>
+                <p>Investment Planner — project growth & returns</p>
+            </div>
+            <div style="text-align:right">
+                <p style="margin:0;color:var(--muted);font-size:13px">Quick estimate tool</p>
+            </div>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <div class="hero">
+                    <div class="left">
+                        <h2>Plan your investment</h2>
+                        <p>Enter an initial amount, monthly contributions, expected annual return, and term to see projected growth.</p>
+                        <div class="form-row" style="margin-top:12px">
+                            <div style="flex:1">
+                                <label for="principal">Initial investment</label>
+                                <input id="principal" type="number" min="0" value="5000" />
+                            </div>
+                            <div style="width:140px">
+                                <label for="period">Years</label>
+                                <input id="years" type="number" min="1" value="20" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div style="flex:1">
+                                <label for="monthly">Monthly contribution</label>
+                                <input id="monthly" type="number" min="0" value="200" />
+                            </div>
+                            <div style="width:140px">
+                                <label for="rate">Annual rate %</label>
+                                <input id="rate" type="number" min="0" step="0.1" value="6" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div style="flex:1">
+                                <label for="comp">Compounding</label>
+                                <select id="comp">
+                                    <option value="12">Monthly</option>
+                                    <option value="4">Quarterly</option>
+                                    <option value="1">Annually</option>
+                                </select>
+                            </div>
+                            <div style="width:140px">
+                                <label>&nbsp;</label>
+                                <div style="display:flex;gap:8px">
+                                    <button id="calc">Calculate</button>
+                                    <button class="secondary" id="reset">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width:220px;text-align:right">
+                        <div style="background:rgba(255,255,255,0.02);padding:12px;border-radius:10px">
+                            <div style="font-size:12px;color:var(--muted)">Projected value</div>
+                            <div id="previewValue" style="font-weight:800;font-size:20px;color:var(--accent-2);margin-top:8px">$0</div>
+                            <div style="font-size:12px;color:var(--muted);margin-top:6px" id="previewGain">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px">
+                    <div class="results">
+                        <div class="stat">
+                            <div style="font-size:12px;color:var(--muted)">Ending balance</div>
+                            <b id="endingBalance">$0</b>
+                        </div>
+                        <div class="stat">
+                            <div style="font-size:12px;color:var(--muted)">Total contributions</div>
+                            <b id="totalContrib">$0</b>
+                        </div>
+                        <div class="stat">
+                            <div style="font-size:12px;color:var(--muted)">Interest earned</div>
+                            <b id="interestEarned">$0</b>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:14px">
+                        <canvas id="growthChart" width="800" height="220"></canvas>
+                        <div class="legend">
+                            <div style="display:flex;align-items:center;gap:8px">
+                                <div class="dot" style="background:linear-gradient(90deg,var(--accent),var(--accent-2))"></div> Balance over time
+                            </div>
+                            <div style="margin-left:auto;color:var(--muted)">Hover points to see values</div>
+                        </div>
+                    </div>
+
+                    <footer>
+                        Assumes contributions are made at the end of each contribution period. Results are estimates and not financial advice.
+                    </footer>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-top:0">Investment insights</h3>
+                <p style="color:var(--muted);font-size:13px;margin-top:6px">
+                    Use the planner to explore how monthly contributions and time affect long-term growth. Small increases in rate or duration compound significantly.
+                </p>
+
+                <div style="margin-top:14px">
+                    <h4 style="margin:0 0 8px 0">Quick scenarios</h4>
+                    <div style="display:flex;gap:8px;flex-direction:column">
+                        <button class="secondary" data-scenario="growth">Aggressive: 8% / $300</button>
+                        <button class="secondary" data-scenario="balanced">Balanced: 6% / $200</button>
+                        <button class="secondary" data-scenario="conservative">Conservative: 4% / $100</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:14px">
+                    <h4 style="margin:0 0 8px 0">Export</h4>
+                    <div style="display:flex;gap:8px">
+                        <button id="csv" class="secondary">Download CSV</button>
+                        <button id="png" class="secondary">Save Chart PNG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Investment calculator with chart + basic export.
+        const $ = id => document.getElementById(id);
+        const principalEl = $('principal'), monthlyEl = $('monthly'), rateEl = $('rate'), yearsEl = $('years'), compEl = $('comp');
+        const calcBtn = $('calc'), resetBtn = $('reset');
+        const endingEl = $('endingBalance'), contribEl = $('totalContrib'), interestEl = $('interestEarned');
+        const previewValue = $('previewValue'), previewGain = $('previewGain');
+        const canvas = $('growthChart'); const ctx = canvas.getContext('2d');
+
+        let lastSchedule = [];
+
+        function formatMoney(v){
+            return v.toLocaleString(undefined, {style:'currency',currency:'USD',maximumFractionDigits:0});
+        }
+
+        function computeSchedule(P, monthly, annualRate, years, compPerYear){
+            // Treat contributions input as monthly contributions.
+            // Use compounding frequency selection: if compPerYear === 12 => monthly; if 1 => yearly; if 4 => quarterly.
+            const schedule = [];
+            let periods, ratePerPeriod, contribPerPeriod;
+            if(compPerYear === 12){
+                periods = years*12;
+                ratePerPeriod = annualRate/100/12;
+                contribPerPeriod = monthly;
+            } else if (compPerYear === 4){
+                periods = years*4;
+                ratePerPeriod = annualRate/100/4;
+                contribPerPeriod = monthly * 3; // three months per quarter
+            } else {
+                periods = years*1;
+                ratePerPeriod = annualRate/100;
+                contribPerPeriod = monthly * 12;
+            }
+            let balance = P;
+            let totalContrib = P;
+            for(let i=1;i<=periods;i++){
+                // interest on existing balance
+                balance = balance * (1 + ratePerPeriod);
+                // contribution at end of period
+                balance += contribPerPeriod;
+                totalContrib += contribPerPeriod;
+                // Record yearly snapshots (once per year)
+                const yearIndex = Math.ceil(i / (compPerYear === 12 ? 12 : compPerYear));
+                if(!schedule[yearIndex]) schedule[yearIndex] = {year:yearIndex, balance:balance, contrib: totalContrib};
+                else schedule[yearIndex].balance = balance, schedule[yearIndex].contrib = totalContrib;
+            }
+            // fill missing years if any
+            const out = [];
+            for(let y=1;y<=years;y++){
+                out.push({
+                    year:y,
+                    balance: schedule[y] ? schedule[y].balance : P,
+                    totalContrib: schedule[y] ? schedule[y].contrib : P
+                });
+            }
+            return out;
+        }
+
+        function renderResults(schedule){
+            lastSchedule = schedule;
+            const last = schedule[schedule.length-1];
+            const totalContrib = last.totalContrib;
+            const ending = last.balance;
+            const interest = ending - totalContrib;
+            endingEl.textContent = formatMoney(Math.round(ending));
+            contribEl.textContent = formatMoney(Math.round(totalContrib));
+            interestEl.textContent = formatMoney(Math.round(interest));
+            previewValue.textContent = formatMoney(Math.round(ending));
+            previewGain.textContent = (interest > 0 ? '+' : '') + formatMoney(Math.round(interest)) + ' total gain';
+            drawChart(schedule);
+        }
+
+        function drawChart(schedule){
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.clientWidth, h = canvas.clientHeight;
+            canvas.width = w * dpr; canvas.height = h * dpr;
+            ctx.scale(dpr,dpr);
+            ctx.clearRect(0,0,w,h);
+            // margins
+            const m = {l:40,r:12,t:12,b:30};
+            const plotW = w - m.l - m.r, plotH = h - m.t - m.b;
+            // data
+            const values = schedule.map(s => s.balance);
+            const max = Math.max(...values) * 1.05;
+            const min = Math.min(...values);
+            // axes
+            ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth=1;
+            ctx.beginPath();
+            ctx.moveTo(m.l, m.t); ctx.lineTo(m.l, m.t+plotH); ctx.lineTo(m.l+plotW, m.t+plotH); ctx.stroke();
+            // grid lines & y labels
+            ctx.fillStyle = 'rgba(170,180,190,0.8)'; ctx.textAlign='right'; ctx.font='12px Inter,Arial';
+            for(let i=0;i<=4;i++){
+                const y = m.t + (plotH * i / 4);
+                ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+                ctx.beginPath();
+                ctx.moveTo(m.l, y); ctx.lineTo(m.l+plotW, y); ctx.stroke();
+                const val = Math.round(max - (max-min) * i / 4);
+                ctx.fillStyle = 'rgba(154,167,178,0.8)';
+                ctx.fillText(formatMoney(val), m.l-8, y+4);
+            }
+            // x labels
+            ctx.textAlign='center'; ctx.fillStyle='rgba(154,167,178,0.8)';
+            schedule.forEach((s, idx) => {
+                const x = m.l + (plotW * idx / (schedule.length-1 || 1));
+                ctx.fillText(s.year.toString(), x, m.t + plotH + 18);
+            });
+            // polyline
+            ctx.beginPath();
+            schedule.forEach((s, idx) => {
+                const x = m.l + (plotW * idx / (schedule.length-1 || 1));
+                const y = m.t + plotH - ((s.balance - min) / (max - min || 1)) * plotH;
+                if(idx===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+            });
+            // stroke line
+            const gradient = ctx.createLinearGradient(m.l,0,m.l+plotW,0);
+            gradient.addColorStop(0,'#2dd4bf'); gradient.addColorStop(1,'#60a5fa');
+            ctx.strokeStyle = gradient; ctx.lineWidth=2.5; ctx.stroke();
+            // area fill
+            ctx.lineTo(m.l+plotW, m.t+plotH); ctx.lineTo(m.l, m.t+plotH); ctx.closePath();
+            ctx.fillStyle = 'rgba(96,165,250,0.06)'; ctx.fill();
+            // points
+            ctx.fillStyle = '#fff';
+            schedule.forEach((s, idx) => {
+                const x = m.l + (plotW * idx / (schedule.length-1 || 1));
+                const y = m.t + plotH - ((s.balance - min) / (max - min || 1)) * plotH;
+                ctx.beginPath(); ctx.arc(x,y,3.5,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,0.95)'; ctx.fill();
+            });
+
+            // tooltip handling
+            canvas.onmousemove = function(e){
+                const rect = canvas.getBoundingClientRect();
+                const mx = (e.clientX - rect.left);
+                const my = (e.clientY - rect.top);
+                // find nearest point
+                let nearest = null, nd = Infinity, ni = -1;
+                schedule.forEach((s, idx) => {
+                    const x = m.l + (plotW * idx / (schedule.length-1 || 1));
+                    const y = m.t + plotH - ((s.balance - min) / (max - min || 1)) * plotH;
+                    const d = Math.hypot(mx - x, my - y);
+                    if(d < nd){ nd = d; nearest = {x,y,s,idx}; ni = idx; }
+                });
+                // redraw to show hover marker & tooltip
+                drawChartStatic(schedule); // redraw base
+                if(nd < 16 && nearest){
+                    const {x,y,s,idx} = nearest;
+                    ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,0.14)'; ctx.fill();
+                    // tooltip box
+                    const text = 'Year ' + s.year + ': ' + formatMoney(Math.round(s.balance));
+                    const pad = 8; ctx.font='12px Inter,Arial';
+                    const tw = ctx.measureText(text).width;
+                    let tx = x + 12, ty = y - 12;
+                    if(tx + tw + pad*2 > m.l+plotW) tx = x - tw - pad*2 - 12;
+                    ctx.fillStyle = 'rgba(2,6,15,0.9)';
+                    roundRect(ctx, tx, ty - 20, tw + pad*2, 28, 6, true, false);
+                    ctx.fillStyle = '#e6eef6'; ctx.textAlign='left';
+                    ctx.fillText(text, tx + pad, ty - 0);
+                }
+            };
+            canvas.onmouseleave = function(){ drawChartStatic(schedule); canvas.onmousemove = null; };
+        }
+
+        function drawChartStatic(schedule){
+            // simple redraw ignoring tooltip capture to avoid recursion
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.clientWidth, h = canvas.clientHeight;
+            canvas.width = w * dpr; canvas.height = h * dpr;
+            ctx.scale(dpr,dpr);
+            ctx.clearRect(0,0,w,h);
+            const m = {l:40,r:12,t:12,b:30};
+            const plotW = w - m.l - m.r, plotH = h - m.t - m.b;
+            const values = schedule.map(s => s.balance);
+            const max = Math.max(...values) * 1.05;
+            const min = Math.min(...values);
+            ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth=1;
+            ctx.beginPath();
+            ctx.moveTo(m.l, m.t); ctx.lineTo(m.l, m.t+plotH); ctx.lineTo(m.l+plotW, m.t+plotH); ctx.stroke();
+            ctx.fillStyle = 'rgba(154,167,178,0.8)'; ctx.textAlign='right'; ctx.font='12px Inter,Arial';
+            for(let i=0;i<=4;i++){
+                const y = m.t + (plotH * i / 4);
+                ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+                ctx.beginPath(); ctx.moveTo(m.l, y); ctx.lineTo(m.l+plotW, y); ctx.stroke();
+                const val = Math.round(max - (max-min) * i / 4);
+                ctx.fillStyle = 'rgba(154,167,178,0.8)';
+                ctx.fillText(formatMoney(val), m.l-8, y+4);
+            }
+            ctx.textAlign='center'; ctx.fillStyle='rgba(154,167,178,0.8)';
+            schedule.forEach((s, idx) => {
+                const x = m.l + (plotW * idx / (schedule.length-1 || 1));
+                ctx.fillText(s.year.toString(), x, m.t + plotH + 18);
+            });
+            ctx.beginPath();
+            schedule.forEach((s, idx) => {
+                const x = m.l + (plotW * idx / (schedule.length-1 || 1));
+                const y = m.t + plotH - ((s.balance - min) / (max - min || 1)) * plotH;
+                if(idx===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+            });
+            const gradient = ctx.createLinearGradient(m.l,0,m.l+plotW,0);
+            gradient.addColorStop(0,'#2dd4bf'); gradient.addColorStop(1,'#60a5fa');
+            ctx.strokeStyle = gradient; ctx.lineWidth=2.5; ctx.stroke();
+            ctx.lineTo(m.l+plotW, m.t+plotH); ctx.lineTo(m.l, m.t+plotH); ctx.closePath();
+            ctx.fillStyle = 'rgba(96,165,250,0.06)'; ctx.fill();
+            schedule.forEach((s, idx) => {
+                const x = m.l + (plotW * idx / (schedule.length-1 || 1));
+                const y = m.t + plotH - ((s.balance - min) / (max - min || 1)) * plotH;
+                ctx.beginPath(); ctx.arc(x,y,3.5,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,0.95)'; ctx.fill();
+            });
+        }
+
+        function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+            if (typeof stroke == 'undefined') stroke = true;
+            if (typeof r === 'undefined') r = 5;
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+            if (fill) ctx.fill();
+            if (stroke) ctx.stroke();
+        }
+
+        function update(){
+            const P = Number(principalEl.value) || 0;
+            const monthly = Number(monthlyEl.value) || 0;
+            const rate = Number(rateEl.value) || 0;
+            const years = Math.max(1, Math.floor(Number(yearsEl.value) || 1));
+            const comp = Number(compEl.value) || 12;
+            const sched = computeSchedule(P, monthly, rate, years, comp);
+            renderResults(sched);
+        }
+
+        calcBtn.addEventListener('click', (e)=>{ e.preventDefault(); update(); });
+        resetBtn.addEventListener('click', (e)=>{ e.preventDefault();
+            principalEl.value = 5000; monthlyEl.value = 200; rateEl.value = 6; yearsEl.value = 20; compEl.value = 12;
+            update();
+        });
+
+        // scenario buttons
+        document.querySelectorAll('[data-scenario]').forEach(btn=>{
+            btn.addEventListener('click', ()=> {
+                const t = btn.dataset.scenario;
+                if(t==='growth'){ rateEl.value=8; monthlyEl.value=300; yearsEl.value=25; }
+                if(t==='balanced'){ rateEl.value=6; monthlyEl.value=200; yearsEl.value=20; }
+                if(t==='conservative'){ rateEl.value=4; monthlyEl.value=100; yearsEl.value=15; }
+                update();
+            });
+        });
+
+        // CSV export
+        $('csv').addEventListener('click', ()=>{
+            if(!lastSchedule.length) { update(); }
+            const rows = [['Year','Balance','TotalContributed']];
+            lastSchedule.forEach(s=> rows.push([s.year, Math.round(s.balance), Math.round(s.totalContrib)]));
+            const csv = rows.map(r=> r.join(',')).join('\n');
+            const blob = new Blob([csv], {type:'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'investment-schedule.csv';
+            a.click(); URL.revokeObjectURL(url);
+        });
+
+        // PNG export of chart
+        $('png').addEventListener('click', ()=>{
+            const data = canvas.toDataURL('image/png');
+            const a = document.createElement('a'); a.href = data; a.download = 'growth-chart.png'; a.click();
+        });
+
+        // init
+        update();
+    </script>
+</body>
+</html>
