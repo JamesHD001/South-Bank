@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>South Bank — Investments</title>
+    <style>
+        :root{
+            --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#2dd4bf; --glass: rgba(255,255,255,0.03);
+            --success:#16a34a; --danger:#ef4444; --radius:10px; --max-width:1100px;
+        }
+        *{box-sizing:border-box}
+        body{
+            margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+            background:linear-gradient(180deg,#071024 0%, #071422 40%), var(--bg); color:#e6eef6;
+            -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+            padding:28px; display:flex; justify-content:center;
+        }
+        .wrap{width:100%;max-width:var(--max-width);}
+        header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+        .brand{display:flex;gap:12px;align-items:center}
+        .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;color:#042; font-weight:700}
+        h1{font-size:18px;margin:0}
+        p.lead{margin:0;color:var(--muted);font-size:13px}
+        main{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
+        @media (max-width:980px){main{grid-template-columns:1fr} .right{order:2}}
+        .hero{
+            padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--radius);
+            display:flex;gap:18px;align-items:center; margin-bottom:18px;
+        }
+        .hero .info{flex:1}
+        .cta{background:var(--accent); color:#042; padding:10px 14px;border-radius:8px;font-weight:600;border:none;cursor:pointer}
+        .grid{
+            display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;
+        }
+        .card{background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+        .plan-title{font-weight:700;margin:0 0 6px}
+        .plan-sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+        .plan-amount{font-size:20px;font-weight:700;color:var(--accent)}
+        .features{list-style:none;padding:0;margin:8px 0 0;color:var(--muted);font-size:13px}
+        .plan-card .btn{margin-top:12px;width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);cursor:pointer}
+        .right{display:flex;flex-direction:column;gap:14px}
+        form{display:flex;flex-direction:column;gap:10px}
+        label{font-size:13px;color:var(--muted)}
+        input,select{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:var(--glass);color:inherit}
+        .row{display:flex;gap:8px}
+        .row .grow{flex:1}
+        .result{padding:12px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.02)}
+        .muted{color:var(--muted);font-size:13px}
+        .small{font-size:12px;color:var(--muted)}
+        .actions{display:flex;gap:8px}
+        .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+        .btn-primary{background:var(--accent);border:none;padding:10px;border-radius:8px;color:#042;font-weight:700;cursor:pointer}
+        table{width:100%;border-collapse:collapse;font-size:13px}
+        th,td{padding:8px;text-align:left;border-bottom:1px dashed rgba(255,255,255,0.02)}
+        .empty{padding:14px;text-align:center;color:var(--muted)}
+        .pill{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px}
+        footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+    </style>
+</head>
+<body>
+    <div class="wrap" role="application" aria-labelledby="pageTitle">
+        <header>
+            <div class="brand">
+                <div class="logo" aria-hidden="true">SB</div>
+                <div>
+                    <h1 id="pageTitle">South Bank — Investments</h1>
+                    <p class="lead">Grow your savings with simulated portfolios and instant return calculator.</p>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="cta" id="addSampleBtn">Add sample plan</button>
+            </div>
+        </header>
+
+        <main>
+            <section>
+                <div class="hero card" aria-hidden="false">
+                    <div style="width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,#06b6d4,#2dd4bf);display:flex;align-items:center;justify-content:center;font-weight:700;color:#042">INV</div>
+                    <div class="info">
+                        <div style="display:flex;align-items:center;justify-content:space-between">
+                            <div>
+                                <div style="font-weight:700">Investment Simulator</div>
+                                <div class="small">Estimate growth, compare plans, store simulated investments locally</div>
+                            </div>
+                            <div style="text-align:right">
+                                <div class="muted">Portfolio value</div>
+                                <div style="font-weight:800;font-size:18px" id="portfolioTotal">$0.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="card" aria-labelledby="plansTitle" id="plansSection">
+                    <h2 id="plansTitle" style="margin:0 0 10px">Featured Plans</h2>
+                    <div class="grid">
+                        <div class="plan-card card">
+                            <div class="plan-title">Conservative</div>
+                            <div class="plan-sub">Low risk, steady returns</div>
+                            <div class="plan-amount">5% avg. annual</div>
+                            <ul class="features">
+                                <li>Monthly compounding</li>
+                                <li class="small">Ideal for capital preservation</li>
+                            </ul>
+                            <button class="btn" data-plan='{"name":"Conservative","rate":5,"freq":"monthly"}'>Use this</button>
+                        </div>
+                        <div class="plan-card card">
+                            <div class="plan-title">Balanced</div>
+                            <div class="plan-sub">Moderate risk, balanced growth</div>
+                            <div class="plan-amount">8% avg. annual</div>
+                            <ul class="features">
+                                <li>Quarterly compounding</li>
+                                <li class="small">Mix of bonds & equities</li>
+                            </ul>
+                            <button class="btn" data-plan='{"name":"Balanced","rate":8,"freq":"quarterly"}'>Use this</button>
+                        </div>
+                        <div class="plan-card card">
+                            <div class="plan-title">Aggressive</div>
+                            <div class="plan-sub">Higher risk, higher potential</div>
+                            <div class="plan-amount">12% avg. annual</div>
+                            <ul class="features">
+                                <li>Annual rebalancing</li>
+                                <li class="small">Long term growth</li>
+                            </ul>
+                            <button class="btn" data-plan='{"name":"Aggressive","rate":12,"freq":"yearly"}'>Use this</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card" style="margin-top:14px" aria-labelledby="historyTitle">
+                    <h2 id="historyTitle" style="margin:0 0 10px">Saved Simulations</h2>
+                    <div id="listWrap">
+                        <table id="investTable" aria-describedby="historyTitle">
+                            <thead>
+                                <tr><th>Name</th><th>Principal</th><th>Rate</th><th>Term</th><th>Value</th><th></th></tr>
+                            </thead>
+                            <tbody id="investBody">
+                                <tr><td colspan="6" class="empty">No saved simulations yet.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+
+            <aside class="right">
+                <div class="card" aria-labelledby="calcTitle">
+                    <h2 id="calcTitle" style="margin:0 0 10px">Calculator</h2>
+                    <form id="calcForm" autocomplete="off" onsubmit="return false;">
+                        <label for="name">Simulation name</label>
+                        <input id="name" placeholder="My retirement" required />
+
+                        <div class="row">
+                            <div class="grow">
+                                <label for="principal">Principal ($)</label>
+                                <input id="principal" type="number" min="0" step="0.01" value="5000" />
+                            </div>
+                            <div style="width:120px">
+                                <label for="rate">Rate (%)</label>
+                                <input id="rate" type="number" min="0" step="0.01" value="8" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="grow">
+                                <label for="term">Term (years)</label>
+                                <input id="term" type="number" min="1" step="1" value="10" />
+                            </div>
+                            <div style="width:140px">
+                                <label for="freq">Compound freq</label>
+                                <select id="freq">
+                                    <option value="annual">Annually</option>
+                                    <option value="semi">Semi-annually</option>
+                                    <option value="quarterly" selected>Quarterly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display:flex;gap:8px">
+                            <button class="btn-primary" id="calcBtn">Calculate & Save</button>
+                            <button class="btn-ghost" id="clearBtn" type="button">Clear</button>
+                        </div>
+                    </form>
+
+                    <div style="margin-top:12px" class="result" aria-live="polite">
+                        <div class="muted">Estimated results</div>
+                        <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+                            <div>
+                                <div class="small">Future Value</div>
+                                <div style="font-weight:800;font-size:18px" id="futureVal">$0.00</div>
+                            </div>
+                            <div style="text-align:right">
+                                <div class="small">Total Gain</div>
+                                <div id="totalGain" style="font-weight:700;color:var(--accent)">$0.00</div>
+                            </div>
+                        </div>
+                        <canvas id="growthChart" width="340" height="140" style="margin-top:12px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin:0 0 8px">Quick tips</h3>
+                    <ul class="muted small" style="margin:0;padding-left:18px">
+                        <li>Higher compounding frequency increases effective yield.</li>
+                        <li>Longer terms amplify compound growth.</li>
+                        <li>Simulations are stored locally in your browser.</li>
+                    </ul>
+                </div>
+            </aside>
+        </main>
+
+        <footer>
+            <div class="small">Simulated data only. Not financial advice.</div>
+        </footer>
+    </div>
+
+    <script>
+        /* Synchronous script: calculator, storage, UI */
+        (function(){
+            const q = (sel,root=document)=>root.querySelector(sel);
+            const qa = (sel,root=document)=>Array.from(root.querySelectorAll(sel));
+            const principalIn = q('#principal');
+            const rateIn = q('#rate');
+            const termIn = q('#term');
+            const freqIn = q('#freq');
+            const nameIn = q('#name');
+            const calcBtn = q('#calcBtn');
+            const clearBtn = q('#clearBtn');
+            const futureValEl = q('#futureVal');
+            const totalGainEl = q('#totalGain');
+            const growthCanvas = q('#growthChart');
+            const ctx = growthCanvas.getContext('2d');
+            const investBody = q('#investBody');
+            const portfolioTotal = q('#portfolioTotal');
+            const STORAGE_KEY = 'southbank_investments_v1';
+
+            function freqToN(freq){
+                switch(freq){
+                    case 'monthly': return 12;
+                    case 'quarterly': return 4;
+                    case 'semi': return 2;
+                    default: return 1;
+                }
+            }
+
+            function formatMoney(n){
+                return (typeof n!=='number'?0:n).toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:2});
+            }
+
+            function compound(principal,rate,term,n){
+                // rate in percent annual, n times per year
+                const r = rate/100;
+                const periods = n*term;
+                const per = r/n;
+                const future = principal * Math.pow(1+per, periods);
+                // also return yearly timeline values
+                const timeline = [];
+                for(let y=0;y<=term;y++){
+                    const value = principal * Math.pow(1+per,n*y);
+                    timeline.push({year:y,value});
+                }
+                return {future, timeline};
+            }
+
+            function clearCanvas(){
+                ctx.clearRect(0,0,growthCanvas.width,growthCanvas.height);
+            }
+
+            function drawChart(timeline){
+                clearCanvas();
+                const w = growthCanvas.width;
+                const h = growthCanvas.height;
+                const pad = 28;
+                const values = timeline.map(t=>t.value);
+                const max = Math.max(...values,1);
+                const min = Math.min(...values,0);
+                // axes
+                ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+                ctx.beginPath();
+                ctx.moveTo(pad, h-pad);
+                ctx.lineTo(w-pad, h-pad);
+                ctx.lineTo(w-pad, pad);
+                ctx.stroke();
+                // line
+                ctx.strokeStyle = 'rgba(45,212,191,0.95)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                timeline.forEach((t,i)=>{
+                    const x = pad + (i/(timeline.length-1))*(w-2*pad || 1);
+                    const y = pad + (1 - (t.value-min)/(max-min || 1))*(h-2*pad);
+                    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+                });
+                ctx.stroke();
+                // points
+                ctx.fillStyle = 'rgba(45,212,191,0.95)';
+                timeline.forEach((t,i)=>{
+                    const x = pad + (i/(timeline.length-1))*(w-2*pad || 1);
+                    const y = pad + (1 - (t.value-min)/(max-min || 1))*(h-2*pad);
+                    ctx.beginPath();
+                    ctx.arc(x,y,3,0,Math.PI*2);
+                    ctx.fill();
+                });
+                // labels
+                ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                ctx.font = '11px Inter, Arial';
+                ctx.fillText(formatMoney(values[values.length-1]), w-pad-80, pad+12);
+            }
+
+            function loadInvestments(){
+                try{
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    return raw?JSON.parse(raw):[];
+                }catch(e){return []}
+            }
+            function saveInvestments(list){
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            }
+
+            function renderList(){
+                const list = loadInvestments();
+                if(!list.length){
+                    investBody.innerHTML = '<tr><td colspan="6" class="empty">No saved simulations yet.</td></tr>';
+                    portfolioTotal.textContent = formatMoney(0);
+                    return;
+                }
+                investBody.innerHTML = '';
+                let total = 0;
+                list.forEach((s,idx)=>{
+                    const tr = document.createElement('tr');
+                    const fv = s.futureValue || 0;
+                    total += fv;
+                    tr.innerHTML = `
+                        <td><strong>${escapeHtml(s.name)}</strong><div class="small">${s.freq} • ${s.term}y</div></td>
+                        <td>${formatMoney(s.principal)}</td>
+                        <td>${Number(s.rate).toFixed(2)}%</td>
+                        <td>${s.term}y</td>
+                        <td><strong>${formatMoney(fv)}</strong></td>
+                        <td style="text-align:right">
+                            <button class="btn-ghost" data-act="load" data-idx="${idx}">Load</button>
+                            <button class="btn-ghost" data-act="delete" data-idx="${idx}">Delete</button>
+                        </td>
+                    `;
+                    investBody.appendChild(tr);
+                });
+                portfolioTotal.textContent = formatMoney(total);
+            }
+
+            function escapeHtml(str){
+                return String(str).replace(/[&<>"']/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[s]);
+            }
+
+            function handleUsePlan(evt){
+                const btn = evt.target.closest('button[data-plan]');
+                if(!btn) return;
+                try{
+                    const plan = JSON.parse(btn.getAttribute('data-plan'));
+                    rateIn.value = (plan.rate || 0);
+                    // map freq
+                    if(plan.freq === 'monthly') freqIn.value = 'monthly';
+                    else if(plan.freq === 'quarterly') freqIn.value = 'quarterly';
+                    else freqIn.value = 'annual';
+                }catch(e){}
+            }
+
+            function handleTableClick(evt){
+                const btn = evt.target.closest('button[data-act]');
+                if(!btn) return;
+                const idx = Number(btn.getAttribute('data-idx'));
+                const act = btn.getAttribute('data-act');
+                const list = loadInvestments();
+                if(act === 'delete'){
+                    list.splice(idx,1);
+                    saveInvestments(list);
+                    renderList();
+                }else if(act === 'load'){
+                    const s = list[idx];
+                    if(s){
+                        nameIn.value = s.name;
+                        principalIn.value = s.principal;
+                        rateIn.value = s.rate;
+                        termIn.value = s.term;
+                        freqIn.value = s.freqMap || s.freq || 'annual';
+                        // show results
+                        showResult();
+                        window.scrollTo({top:0,behavior:'smooth'});
+                    }
+                }
+            }
+
+            function showResult(saveToList){
+                const principal = parseFloat(principalIn.value) || 0;
+                const rate = parseFloat(rateIn.value) || 0;
+                const term = parseInt(termIn.value) || 0;
+                const freq = freqIn.value;
+                const n = freqToN(freq);
+                const comp = compound(principal,rate,term,n);
+                futureValEl.textContent = formatMoney(comp.future);
+                totalGainEl.textContent = formatMoney(comp.future - principal);
+                drawChart(comp.timeline);
+                if(saveToList){
+                    const name = (nameIn.value || 'Untitled').trim();
+                    const list = loadInvestments();
+                    list.push({
+                        name, principal, rate, term, freq, freqMap:freq, futureValue: comp.future, created: Date.now()
+                    });
+                    saveInvestments(list);
+                    renderList();
+                }
+            }
+
+            // events
+            document.addEventListener('click', function(e){
+                // plan quick use
+                if(e.target.matches('button[data-plan]')) handleUsePlan(e);
+                // table actions
+                if(e.target.closest('#investBody')) handleTableClick(e);
+                if(e.target.id === 'addSampleBtn'){
+                    // add a sample investment quickly
+                    nameIn.value = 'Starter Plan';
+                    principalIn.value = 2500;
+                    rateIn.value = 7;
+                    termIn.value = 5;
+                    freqIn.value = 'monthly';
+                    showResult(true);
+                }
+            });
+
+            calcBtn.addEventListener('click', function(e){
+                // validate
+                const principal = parseFloat(principalIn.value);
+                const rate = parseFloat(rateIn.value);
+                const term = parseInt(termIn.value);
+                if(isNaN(principal) || principal <= 0){ alert('Enter a valid principal amount'); principalIn.focus(); return; }
+                if(isNaN(rate) || rate < 0){ alert('Enter a valid rate'); rateIn.focus(); return; }
+                if(isNaN(term) || term <= 0){ alert('Enter a valid term (years)'); termIn.focus(); return; }
+                showResult(true);
+            });
+
+            clearBtn.addEventListener('click', function(){
+                nameIn.value = ''; principalIn.value = 0; rateIn.value = 0; termIn.value = 1; freqIn.value = 'annual';
+                futureValEl.textContent = formatMoney(0); totalGainEl.textContent = formatMoney(0); clearCanvas();
+            });
+
+            // initialize
+            renderList();
+            // draw default chart
+            showResult(false);
+
+            // small UX: allow Enter on inputs to calculate
+            [principalIn,rateIn,termIn,nameIn].forEach(inp=>{
+                inp.addEventListener('keydown', function(e){
+                    if(e.key === 'Enter') calcBtn.click();
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
