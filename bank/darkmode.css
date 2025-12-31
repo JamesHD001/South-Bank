@@ -1,0 +1,218 @@
+/* =========================
+   GLOBAL DARK MODE
+========================= */
+
+body.dark {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Containers & cards */
+body.dark .container,
+body.dark .profile-header,
+body.dark .service-card,
+body.dark table {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: #605e5e 1px solid;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+body.dark .top-bar {
+  background: linear-gradient(90deg, #0d2a18);
+  color: #e0e0e0;
+}
+
+body.dark .top-bar a {
+  color: #ffffff;
+}
+
+/* =========================
+   PROFILE & STATS
+========================= */
+
+body.dark .profile-header {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+  color: #e0e0e0;
+  border: #605e5e 1px solid;
+}
+
+body.dark .profile-header .stats div {
+  background: #2a2a2a;
+  color: #ffffff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+body.dark .profile-header .details h4,
+body.dark .profile-header .details p {
+    color: #e0e0e0;
+}
+body.dark .profile-header .stats div:hover {
+  background: #1e4d3a;
+  transform: translateY(-3px);
+}
+
+/* =========================
+   BALANCE CARDS
+========================= */
+
+body.dark .balance-card {
+  background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+  border: #605e5e 1px solid;
+}
+
+body.dark .balance-container :hover {
+  background: #1e4d3a;
+  transform: translateY(-3px);
+}
+
+/* =========================
+   ACTION BUTTONS (WITH HOVER)
+========================= */
+
+body.dark .action-buttons a {
+  background:  linear-gradient(135deg, #2a2a2a, #1e1e1e);
+  color: #fff;
+  transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
+  border: #605e5e 1px solid;
+}
+
+body.dark .action-buttons a:hover {
+  background: #1e4d3a;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+}
+
+/* =========================
+   SERVICE CARDS (WITH HOVER)
+========================= */
+
+body.dark .service-card {
+  background: #1e1e1e;
+  color: #e0e0e0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: #605e5e 1px solid;
+}
+
+body.dark .service-card p {
+    color: #e0e0e0;
+}
+body.dark .service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  background: #1e4d3a;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+body.dark thead {
+  background: #2a2a2a;
+}
+
+body.dark tbody tr:hover {
+  background: #333;
+}
+
+/* =========================
+   FORMS
+========================= */
+
+body.dark input,
+body.dark select,
+body.dark textarea {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #e0e0e0;
+}
+
+body.dark input[readonly] {
+  background: #2a2a2a;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+body.dark button {
+  background: #2fa37b;
+  color: #fff;
+}
+
+body.dark button:hover {
+  background: #1e4d3a;
+}
+
+/* =========================
+   TOGGLE SWITCH (UI ONLY)
+========================= */
+
+.theme-toggle input {
+  display: none;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 50px;
+  height: 25px;
+  background: #060606;
+  border-radius: 25px;
+  transition: background 0.3s;
+  border: #000000 1px solid;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  left: 2px;
+  top: 2px;
+  background: rgb(255, 255, 255);
+  border-radius: 50%;
+  transition: transform 0.3s;
+  border: #8a8a8a 1px solid;
+}
+
+input:checked + .toggle-slider {
+  background: #ffffff;
+  
+}
+
+input:checked + .toggle-slider::before {
+  transform: translateX(25px);
+}
+
+body.dark .footer {
+  background: #1e1e1e;
+  color: #e0e0e0;
+}
+
+body.dark .loadMoreBtn {
+  background: #122d22;
+  color: #fff;
+}
+body.dark .loadMoreBtn:hover {
+  background: #1e4d3a;
+}
+
+body.dark .top-bar-right a {
+  background: #122d22;
+  color: #e0e0e0;
+}
+
+body.dark .top-bar-select {
+  background: #122d22;
+  color: #e0e0e0;
+}
+
+body.dark .top-bar-right a:hover {
+  background: #1e4d3a;
+}

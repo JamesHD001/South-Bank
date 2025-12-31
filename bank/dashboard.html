@@ -3,96 +3,225 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>South Bank </title>
+  <title>South Bank Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="darkmode.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-    body { background: #f4f4fc; color: #111; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background: #f5f7fa; color: #1a1a1a; }
 
+    /* Top Bar */
     .top-bar {
       display: flex; justify-content: space-between; align-items: center;
-      background: #1e4d3a; color: white; padding: 10px 20px;
+      background: linear-gradient(90deg, #1e4d3a, #2fa37b);
+      color: white; padding: 12px 25px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
+    .top-bar-select { padding: 6px 10px; border: none; border-radius: 6px; }
+    .top-bar-right a {
+      color: white; margin-left: 20px; text-decoration: none;
+      font-weight: 500; transition: 0.2s;
+      background: #0bec9ea4; padding: 8px 12px; border-radius: 8px;
+    }
+    .top-bar-right a:hover { opacity: 0.8; }
 
-    .top-bar .left { display: flex; align-items: center; gap: 10px; }
-    .top-bar .flag { width: 30px; height: 20px; }
-    .top-bar select { padding: 5px; border: none; border-radius: 4px; }
-    .top-bar .right a { color: white; margin-left: 20px; text-decoration: none; }
-
+    /* Profile Section */
     .profile-header {
-      display: flex; align-items: center; gap: 15px;
-      padding: 20px; background: white; margin: 20px;
-      border-radius: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      display: flex; align-items: center; gap: 20px;
+      padding: 20px; margin: 20px auto;
+      background: white; border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      max-width: 1000px;
     }
-
     .profile-header img {
-      width: 70px; height: 70px; border-radius: 50%;
+      width: 80px; height: 80px; border-radius: 50%; border: 3px solid #2fa37b;
     }
+    .profile-header .details h3 { font-size: 1.6em; margin-bottom: 5px; }
+    .profile-header .details p { font-size: 0.9em; color: #555; }
+    .profile-header .stats {
+      display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;
+    }
+    .profile-header .stats div {
+      background: #f0f4f8; padding: 10px 15px;
+      border-radius: 10px; text-align: center; min-width: 120px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    }
+    .profile-header .stats div h4 { font-size: 0.85em; color: #777; margin-bottom: 3px; }
+    .profile-header .stats div p { font-weight: 600; font-size: 1em; }
 
+    /* Balance Cards */
+    .balance-container {
+      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+      max-width: 1000px; margin: 0 auto;
+    }
     .balance-card {
-      background: #4324c0; color: white; padding: 30px;
-      display: flex; justify-content: space-between;
-      border-radius: 10px; margin: 20px; flex-wrap: wrap;
+      flex: 1 1 300px;
+      background: linear-gradient(135deg, #14d8ed, #85edff);
+      color: white; padding: 25px; border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      display: flex; justify-content: space-between; flex-direction: column;
+      min-height: 180px;
+      transition: transform 0.2s;
     }
+    .balance-card:hover { transform: translateY(-5px); }
+    .balance-card h1 { font-size: 1.8em; margin: 10px 0; }
+    .balance-card p { font-size: 0.95em; margin: 3px 0; }
 
-    .balance-card h1 { font-size: 2.2em; margin: 10px 0; }
-    .account-number { text-align: right; }
-
+    /* Action Buttons */
     .action-buttons {
-      text-align: center; margin: 30px 0;
-      display: flex; flex-wrap: wrap;
-      justify-content: center; gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 3 buttons per row */
+      gap: 20px;
+      max-width: 900px;
+      margin: 30px auto;
     }
 
     .action-buttons a {
-      background: #1e4d3a; color: white; padding: 12px 25px;
-      text-decoration: none; border-radius: 6px;
-      font-weight: bold;
-    }
-
-    .transactions-title {
-      margin: 30px 20px 10px; font-weight: bold; font-size: 20px;
-    }
-
-    table {
-      width: calc(100% - 40px); margin: 0 auto;
-      border-collapse: collapse; background: white;
-      border-radius: 10px; overflow: hidden;
-    }
-
-    thead { background: #ddd; }
-    th, td {
-      padding: 10px; text-align: center; font-size: 14px;
-      border-bottom: 1px solid #ccc;
-    }
-
-footer {
-      margin-top: 50px;
-      padding: 20px;
-      text-align: center;
-      background: #002d72;
+      background: #2fa37b;
       color: white;
-      font-size: 12px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .action-buttons a:hover {
+      background: #1e4d3a;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .action-buttons a:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .action-icon {
+      width: 24px;
+      height: 24px;
     }
     
+    /* Fade-slide animation for cards */
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Initially hide cards */
+    .balance-card,
+    .action-buttons a,
+    .service-card {
+      opacity: 0;
+      animation: fadeSlideUp 0.4s ease-out forwards;
+    }
+
+    /* Responsive: stack buttons on small screens */
     @media screen and (max-width: 768px) {
-      .balance-card { flex-direction: column; gap: 15px; }
-      .account-number { text-align: left; }
+      .action-buttons {
+        grid-template-columns: 1fr; /* one button per row on mobile */
+      }
+    }
+    
+    /* Bounce Animation for Action Buttons */
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Transactions Table */
+    .transactions-title { text-align: center; font-weight: 600; font-size: 1.3em; margin-top: 40px; }
+    table {
+      width: 95%; margin: 15px auto 10px;
+      border-collapse: collapse; border-radius: 12px;
+      overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      background: white;
+    }
+    thead { background: #f0f4f8; }
+    th, td { padding: 12px; text-align: center; font-size: 0.9em; }
+    tbody tr:hover { background: #f9f9f9; }
+
+    .service-card {
+      flex: 1 1 180px;
+      background: white;
+      padding: 25px 15px;
+      border-radius: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .service-card img { display: block; margin: 0 auto; }
+
+    .service-card p {
+      margin-top: 10px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    .loadMoreBtn {
+      background:#2fa37b; color:white; padding:12px 25px; 
+      border:none; border-radius:8px; font-weight:600; cursor:pointer;
+    }
+    .loadMoreBtn:hover {
+      background:#1e4d3a;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center; padding: 20px; background: #002d72;
+      color: white; font-size: 0.85em;
+    }
+
+    /* Animate table rows sliding in from bottom */
+  @keyframes slideIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  tbody tr {
+    animation: slideIn 0.4s ease forwards;
+  }
+
+    /* Responsive */
+    @media screen and (max-width: 768px) {
+      .profile-header { flex-direction: column; align-items: flex-start; }
+      .balance-container { flex-direction: column; gap: 15px; }
       .action-buttons { flex-direction: column; }
     }
   </style>
+
   <script>
-    // Check if user is logged in
     window.onload = function() {
       const loggedIn = sessionStorage.getItem("loggedIn");
-      if (!loggedIn) {
-        window.location.href = "auth/login.html";
-      }
-
-      // Optional dev message
-      console.log("Welcome to the dashboard. Session active.");
+      if (!loggedIn) window.location.href = "auth/login.html";
+      console.log("Welcome to the modern dashboard.");
     };
 
-    // Logout link click handler
     function logout() {
       sessionStorage.removeItem("loggedIn");
       window.location.href = "auth/login.html";
@@ -102,73 +231,140 @@ footer {
 <body>
 
   <header class="top-bar">
-    
-      <select><option>English</option></select>
-    </div>
-    <div class="right">
+    <select>
+      <option>English</option>
+    </select>
+
+    <div class="top-bar-right">
+      <div class="theme-slider">
+        <label class="theme-toggle">
+          <input type="checkbox" id="themeSwitch">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
       <a href="settings.html">Settings</a>
-      <a href="logout.html" onclick="logout()">Logout</a>
+      <a href="#" onclick="logout()">Logout</a>
     </div>
   </header>
 
   <section class="profile-header">
-    <img src=".\auth\profile.jpg" alt="William Richard">
+    <img src="./auth/profile.jpg" alt="William Richard">
     <div class="details">
       <h3>William Richard</h3>
       <p>9026 Thrasher Ave, Brooklyn, NY 11203</p>
-      <div class="details">
-        <h4>Total Assets</h4>
-        <p>$1,998,685.00</p>
-        <p>Loan Eligibility: $18,000</p>
-        <p>Credit Cards: $25,000</p>
-        <p>Investments: $0.00. Invest your money and earn profits!
-          <a href="investments.html">Start Investing Now!</a>
-        </p>
-  
+      <div class="stats">
+        <div>
+          <h4>Total Assets</h4>
+          <p>$1,998,685</p>
+        </div>
+        <div>
+          <h4>Loan Eligibility</h4>
+          <p>$18,000</p>
+        </div>
+        <div>
+          <h4>Cards</h4>
+          <p>$25,000</p>
+        </div>
+        <div>
+          <h4>Investments</h4>
+          <p>$0</p>
+        </div>
       </div>
     </div>
-
   </section>
 
-  <!-- Checking Account -->
-  <section class="balance-card">
-    <div class="balance-info">
+  <div class="balance-container">
+    <div class="balance-card">
       <p>Checking Account Balance</p>
-      <h1>$1,050,085.00 USD</h1>
-      <p>Account Name<br><strong>William Richard</strong></p>
+      <h1>$1,050,085</h1>
+      <p>Account Name: <strong>William Richard</strong></p>
+      <p>Account #: <strong>8787504713</strong></p>
+      <p>Routing #: <strong>101000022</strong></p>
     </div>
-    <div class="account-number">
-      <p>Account Number</p><strong>8787504713</strong><br/>
-      <p>Routing Number</p><strong>101000022</strong>
-    </div>
-  </section>
 
-
-  <!-- Saving Account -->
-  <section class="balance-card">
-    <div class="balance-info">
+    <div class="balance-card">
       <p>Saving Account Balance</p>
-      <h1>$948,600.00 USD</h1>
-      <p>Account Name<br><strong>William Richard</strong></p>
+      <h1>$948,600</h1>
+      <p>Account Name: <strong>William Richard</strong></p>
+      <p>Account #: <strong>5400310988</strong></p>
+      <p>Routing #: <strong>749000198</strong></p>
     </div>
-    <div class="account-number">
-      <p>Account Number</p><strong>5400310988</strong><br/>
-      <p>Routing Number</p><strong>749000198</strong>
-    </div>
-  </section>
-  
-  <!-- Action Buttons -->
-  <div class="action-buttons">
-    <a href="transfer-form.html">Transfer</a>
-    <a href="receive-form.html">Receive</a>
-    <a href="ach-form.html">ACH</a>
-    <a href="wire-transfer-form.html">Wire Transfer</a>
-    <a href="deposit-form.html">Deposit</a>
-    <a href="withdraw-form.html">Withdraw</a>
   </div>
 
+  <div class="action-buttons">
+    <a href="transfer-form.html">
+      <img src="/bank/public/hm/assets/images/icon/transfer.png" alt="Transfer" class="action-icon">
+      Transfer
+    </a>
+    <a href="receive-form.html">
+      <img src="/bank/public/hm/assets/images/icon/receive.jpeg" alt="Receive" class="action-icon">
+      Receive
+    </a>
+    <a href="ach-form.html">
+      <img src="/bank/public/hm/assets/images/icon/ach.jpeg" alt="ACH" class="action-icon">
+      ACH
+    </a>
+    <a href="wire-transfer-form.html">
+      <img src="/bank/public/hm/assets/images/icon/wire.png" alt="Wire Transfer" class="action-icon">
+      Wire Transfer
+    </a>
+    <a href="deposit-form.html">
+      <img src="/bank/public/hm/assets/images/icon/deposit.png" alt="Deposit" class="action-icon">
+      Deposit
+    </a>
+    <a href="withdraw-form.html">
+      <img src="/bank/public/hm/assets/images/icon/withdraw.png" alt="Withdraw" class="action-icon">
+      Withdraw
+    </a>
+  </div>
+
+  <div class="service-cards-container" style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px; max-width:1000px; margin: 30px auto;">
+  <div class="service-card" onclick="location.href='electricity.html'">
+    <img src="/bank/public/hm/assets/images/icon/pay-electricity.png" alt="Electricity" style="width:40px; margin-bottom:10px;">
+    <p>Pay Electricity Bills</p>
+  </div>
+  <div class="service-card" onclick="location.href='tax.html'">
+    <img src="/bank/public/hm/assets/images/icon/pay-tax.png" alt="Tax" style="width:40px; margin-bottom:10px;">
+    <p>Pay Taxes</p>
+  </div>
+  <div class="service-card" onclick="location.href='water.html'">
+    <img src="/bank/public/hm/assets/images/icon/water-bill.png" alt="Water" style="width:40px; margin-bottom:10px;">
+    <p>Pay Water Bills</p>
+  </div>
+  <div class="service-card" onclick="location.href='internet.html'">
+    <img src="/bank/public/hm/assets/images/icon/internet-bill.png" alt="Internet" style="width:40px; margin-bottom:10px;">
+    <p>Pay Internet Bills</p>
+  </div>
+  <div class="service-card" onclick="location.href='loans.html'">
+    <img src="/bank/public/hm/assets/images/icon/loan-repayment.png" alt="Loans" style="width:40px; margin-bottom:10px;">
+    <p>Loan Repayment</p>
+  </div>
+  <div class="service-card" onclick="location.href='donate.html'">
+    <img src="/bank/public/hm/assets/images/icon/charity.png" alt="Mobile Recharge" style="width:40px; margin-bottom:10px;">
+    <p>donate</p>
+  </div>
+  <div class="service-card" onclick="location.href='betting.html'">
+    <img src="/bank/public/hm/assets/images/icon/betting.png" alt="Mobile Recharge" style="width:40px; margin-bottom:10px;">
+    <p>Fund betting wallet</p>
+  </div>
+  <div class="service-card" onclick="location.href='cable.html'">
+    <img src="/bank/public/hm/assets/images/icon/tv.png" alt="Mobile Recharge" style="width:40px; margin-bottom:10px;">
+    <p>Cable</p>
+  </div>
+  <div class="service-card" onclick="location.href='invest.html'">
+    <img src="/bank/public/hm/assets/images/icon/invest.png" alt="Mobile Recharge" style="width:40px; margin-bottom:10px;">
+    <p>Invest</p>
+  </div>
+  <div class="service-card" onclick="location.href='pay-tuition.html'">
+    <img src="/bank/public/hm/assets/images/icon/tuition.png" alt="Mobile Recharge" style="width:40px; margin-bottom:10px;">
+    <p>Pay Tuition</p>
+  </div>
+  </div>
+
+  <!-- Transaction Table with Load More -->
   <div class="transactions-title">Transaction History</div>
-  <table>
+  <table id="transactionTable">
     <thead>
       <tr>
         <th>#</th>
@@ -179,43 +375,141 @@ footer {
         <th>Type</th>
       </tr>
     </thead>
-     <tbody>
-    <tr><td>1</td><td>2024-05-12</td><td>Chase Bank</td><td>Emily Carter</td><td>$10,500</td><td>Deposit</td></tr>
-    <tr><td>2</td><td>2024-06-03</td><td>Wells Fargo</td><td>John Smith</td><td>$12,800</td><td>ACH</td></tr>
-    <tr><td>3</td><td>2024-06-24</td><td>Bank of America</td><td>Lisa Johnson</td><td>$15,000</td><td>Transfer</td></tr>
-    <tr><td>4</td><td>2024-07-02</td><td>Capital One</td><td>David Lee</td><td>$25,500</td><td>Wire Transfer</td></tr>
-    <tr><td>5</td><td>2024-07-20</td><td>Citi Bank</td><td>Jennifer Adams</td><td>$11,400</td><td>Deposit</td></tr>
-    <tr><td>6</td><td>2024-08-08</td><td>HSBC USA</td><td>Michael Rodriguez</td><td>$20,000</td><td>ACH</td></tr>
-    <tr><td>7</td><td>2024-08-26</td><td>PNC Bank</td><td>Susan Martinez</td><td>$30,300</td><td>Wire Transfer</td></tr>
-    <tr><td>8</td><td>2024-09-15</td><td>TD Bank</td><td>Robert Taylor</td><td>$18,750</td><td>Transfer</td></tr>
-    <tr><td>9</td><td>2024-09-29</td><td>US Bank</td><td>Mary Walker</td><td>$14,200</td><td>Withdraw</td></tr>
-    <tr><td>10</td><td>2024-10-11</td><td>Regions Bank</td><td>Daniel Harris</td><td>$16,800</td><td>Deposit</td></tr>
-    <tr><td>11</td><td>2024-10-27</td><td>SunTrust Bank</td><td>Patricia Allen</td><td>$22,500</td><td>ACH</td></tr>
-    <tr><td>12</td><td>2024-11-12</td><td>BB&T Bank</td><td>Steven Clark</td><td>$28,000</td><td>Wire Transfer</td></tr>
-    <tr><td>13</td><td>2024-12-01</td><td>Fifth Third Bank</td><td>Donna Lewis</td><td>$35,000</td><td>Transfer</td></tr>
-    <tr><td>14</td><td>2024-12-19</td><td>Ally Bank</td><td>Thomas Young</td><td>$19,900</td><td>Receive</td></tr>
-    <tr><td>15</td><td>2025-01-04</td><td>KeyBank</td><td>Elizabeth King</td><td>$16,450</td><td>Deposit</td></tr>
-    <tr><td>16</td><td>2025-01-19</td><td>Discover Bank</td><td>Mark Wright</td><td>$23,100</td><td>Withdraw</td></tr>
-    <tr><td>17</td><td>2025-02-05</td><td>First Republic Bank</td><td>Carol Hill</td><td>$27,800</td><td>ACH</td></tr>
-    <tr><td>18</td><td>2025-02-22</td><td>Charles Schwab Bank</td><td>Matthew Scott</td><td>$33,200</td><td>Wire Transfer</td></tr>
-    <tr><td>19</td><td>2025-03-10</td><td>SoFi Bank</td><td>Amy Green</td><td>$45,600</td><td>Transfer</td></tr>
-    <tr><td>20</td><td>2025-03-25</td><td>Robinhood Bank</td><td>Larry Baker</td><td>$26,350</td><td>Deposit</td></tr>
-    <tr><td>21</td><td>2025-04-02</td><td>American Express Bank</td><td>Samantha Nelson</td><td>$38,000</td><td>ACH</td></tr>
-    <tr><td>22</td><td>2025-04-10</td><td>Comerica Bank</td><td>Joshua Hall</td><td>$40,100</td><td>Wire Transfer</td></tr>
-    <tr><td>23</td><td>2025-04-17</td><td>Citizens Bank</td><td>Rebecca Allen</td><td>$13,600</td><td>Transfer</td></tr>
-    <tr><td>24</td><td>2025-04-25</td><td>First Horizon Bank</td><td>Anthony Phillips</td><td>$29,900</td><td>Deposit</td></tr>
-    <tr><td>25</td><td>2025-05-01</td><td>Huntington Bank</td><td>Karen Campbell</td><td>$17,750</td><td>Withdraw</td></tr>
-    <tr><td>26</td><td>2025-05-04</td><td>Old National Bank</td><td>Jason Stewart</td><td>$21,200</td><td>ACH</td></tr>
-    <tr><td>27</td><td>2025-05-10</td><td>Santander Bank</td><td>Rachel Turner</td><td>$44,500</td><td>Receive</td></tr>
-    <tr><td>28</td><td>2025-05-14</td><td>Flagstar Bank</td><td>Jeffrey Ramirez</td><td>$31,700</td><td>Wire Transfer</td></tr>
-    <tr><td>29</td><td>2025-05-20</td><td>BMO Harris Bank</td><td>Angela Cox</td><td>$36,900</td><td>Transfer</td></tr>
-    <tr><td>30</td><td>2025-05-27</td><td>Truist Bank</td><td>Eric Edwards</td><td>$42,300</td><td>Deposit</td></tr>
-  </tbody>
+    <tbody id="transactionBody"></tbody>
   </table>
 
-<footer>
+  <div style="text-align:center; margin-bottom: 40px;">
+    <button class="loadMoreBtn" id="loadMoreBtn">Load More</button>
+    <p id="endMessage" style="display:none; margin-top:10px; color:#555; font-style:italic;">To view transaction histories a year or older, kindly contact the bank.</p>
+  </div>
+
+  <footer class="footer">
     &copy; 2025 South International Bank. All rights reserved. | Privacy Policy | Terms of Use
   </footer>
+
+  <script>
+    const transactions = [
+      { date: "2024-05-12", bank: "Chase Bank", sender: "Emily Carter", amount: "$10,500", type: "Deposit" },
+      { date: "2024-06-03", bank: "Wells Fargo", sender: "John Smith", amount: "$12,800", type: "ACH" },
+      { date: "2024-06-24", bank: "Bank of America", sender: "Lisa Johnson", amount: "$15,000", type: "Transfer" },
+      { date: "2024-07-02", bank: "Capital One", sender: "David Lee", amount: "$25,500", type: "Wire Transfer" },
+      { date: "2024-07-20", bank: "Citi Bank", sender: "Jennifer Adams", amount: "$11,400", type: "Deposit" },
+      { date: "2024-08-08", bank: "HSBC USA", sender: "Michael Rodriguez", amount: "$20,000", type: "ACH" },
+      { date: "2024-08-26", bank: "PNC Bank", sender: "Susan Martinez", amount: "$30,300", type: "Wire Transfer" },
+      { date: "2024-09-15", bank: "TD Bank", sender: "Robert Taylor", amount: "$18,750", type: "Transfer" },
+      { date: "2024-09-29", bank: "US Bank", sender: "Mary Walker", amount: "$14,200", type: "Withdraw" },
+      { date: "2024-10-11", bank: "Regions Bank", sender: "Daniel Harris", amount: "$16,800", type: "Deposit" },
+      { date: "2024-10-27", bank: "SunTrust Bank", sender: "Patricia Allen", amount: "$22,500", type: "ACH" },
+      { date: "2024-11-12", bank: "BB&T Bank", sender: "Steven Clark", amount: "$28,000", type: "Wire Transfer" },
+      { date: "2024-12-01", bank: "Fifth Third Bank", sender: "Donna Lewis", amount: "$35,000", type: "Transfer" },
+      { date: "2024-12-19", bank: "Ally Bank", sender: "Thomas Young", amount: "$19,900", type: "Receive" },
+      { date: "2025-01-04", bank: "KeyBank", sender: "Elizabeth King", amount: "$16,450", type: "Deposit" },
+      { date: "2025-01-19", bank: "Discover Bank", sender: "Mark Wright", amount: "$23,100", type: "Withdraw" },
+      { date: "2025-02-05", bank: "First Republic Bank", sender: "Carol Hill", amount: "$27,800", type: "ACH" },
+      { date: "2025-02-22", bank: "Charles Schwab Bank", sender: "Matthew Scott", amount: "$33,200", type: "Wire Transfer" },
+      { date: "2025-03-10", bank: "SoFi Bank", sender: "Amy Green", amount: "$45,600", type: "Transfer" },
+      { date: "2025-03-25", bank: "Robinhood Bank", sender: "Larry Baker", amount: "$26,350", type: "Deposit" },
+      { date: "2025-04-02", bank: "American Express Bank", sender: "Samantha Nelson", amount: "$38,000", type: "ACH" },
+      { date: "2025-04-10", bank: "Comerica Bank", sender: "Joshua Hall", amount: "$40,100", type: "Wire Transfer" },
+      { date: "2025-04-17", bank: "Citizens Bank", sender: "Rebecca Allen", amount: "$13,600", type: "Transfer" },
+      { date: "2025-04-25", bank: "First Horizon Bank", sender: "Anthony Phillips", amount: "$29,900", type: "Deposit" },
+      { date: "2025-05-01", bank: "Huntington Bank", sender: "Karen Campbell", amount: "$17,750", type: "Withdraw" },
+      { date: "2025-05-04", bank: "Old National Bank", sender: "Jason Stewart", amount: "$21,200", type: "ACH" },
+      { date: "2025-05-10", bank: "Santander Bank", sender: "Rachel Turner", amount: "$44,500", type: "Receive" },
+      { date: "2025-05-14", bank: "Flagstar Bank", sender: "Jeffrey Ramirez", amount: "$31,700", type: "Wire Transfer" },
+      { date: "2025-05-20", bank: "BMO Harris Bank", sender: "Angela Cox", amount: "$36,900", type: "Transfer" },
+      { date: "2025-05-27", bank: "Truist Bank", sender: "Eric Edwards", amount: "$42,300", type: "Deposit" },
+      { date: "2025-06-02", bank: "M&T Bank", sender: "Michelle Collins", amount: "$24,800", type: "ACH" },
+      { date: "2025-06-08", bank: "Silicon Valley Bank", sender: "Brian Stewart", amount: "$39,400", type: "Wire Transfer" },
+      { date: "2025-06-15", bank: "Zions Bank", sender: "Laura Sanchez", amount: "$15,900", type: "Withdraw" },
+      { date: "2025-06-20", bank: "East West Bank", sender: "Kevin Morris", amount: "$34,600", type: "Transfer" },
+      { date: "2025-06-25", bank: "First Citizens Bank", sender: "Sarah Rogers", amount: "$41,800", type: "Deposit" },
+      { date: "2025-06-28", bank: "Webster Bank", sender: "George Reed", amount: "$18,300", type: "ACH" },
+      { date: "2025-07-02", bank: "Cullen/Frost Bankers", sender: "Kimberly Cook", amount: "$37,500", type: "Wire Transfer" },
+      { date: "2025-07-06", bank: "Wintrust Financial", sender: "Jason Morgan", amount: "$14,700", type: "Receive" },
+      { date: "2025-07-10", bank: "Synovus Bank", sender: "Stephanie Bell", amount: "$28,400", type: "Transfer" },
+      { date: "2025-07-15", bank: "Valley National Bank", sender: "Scott Murphy", amount: "$32,100", type: "Deposit" },
+      { date: "2025-07-20", bank: "FirstBank", sender: "Brenda Bailey", amount: "$23,500", type: "Withdraw" },
+      { date: "2025-07-25", bank: "Old Point National Bank", sender: "Dennis Rivera", amount: "$46,200", type: "ACH" },
+      { date: "2025-07-30", bank: "Pacific Western Bank", sender: "Cynthia Cooper", amount: "$27,300", type: "Wire Transfer" },
+      { date: "2025-08-04", bank: "Associated Bank", sender: "Frank Richardson", amount: "$19,600", type: "Transfer" },
+      { date: "2025-08-10", bank: "BancorpSouth Bank", sender: "Sharon Cox", amount: "$43,700", type: "Deposit" },
+      { date: "2025-08-15", bank: "Commerce Bank", sender: "Raymond Howard", amount: "$12,900", type: "Receive" },
+      { date: "2025-08-20", bank: "Hancock Whitney Bank", sender: "Kathleen Ward", amount: "$30,800", type: "ACH" },
+      { date: "2025-08-25", bank: "First National Bank", sender: "Patrick Torres", amount: "$22,400", type: "Wire Transfer" },
+      { date: "2025-08-30", bank: "Great Western Bank", sender: "Diane Peterson", amount: "$38,900", type: "Transfer" },
+      { date: "2025-09-04", bank: "Navy Federal Credit Union", sender: "Johnny Gray", amount: "$29,100", type: "Deposit" },
+      { date: "2025-09-10", bank: "Texas Capital Bank", sender: "Janet Ramirez", amount: "$16,200", type: "Withdraw" },
+      { date: "2025-09-15", bank: "CIBC Bank USA", sender: "Aaron James", amount: "$24,300", type: "ACH" },
+      { date: "2025-09-20", bank: "First Midwest Bank", sender: "Maria Watson", amount: "$41,500", type: "Wire Transfer" },
+      { date: "2025-09-25", bank: "Old National Bank", sender: "Gary Brooks", amount: "$35,400", type: "Receive" },
+      { date: "2025-09-30", bank: "BankUnited", sender: "Heather Kelly", amount: "$18,800", type: "Transfer" },
+      { date: "2025-10-05", bank: "BOK Financial", sender: "Justin Sanders", amount: "$33,900", type: "Deposit" },
+      { date: "2025-10-10", bank: "First Hawaiian Bank", sender: "Amy Price", amount: "$27,600", type: "ACH" },
+      { date: "2025-10-15", bank: "CIT Bank", sender: "Brandon Bennett", amount: "$39,800", type: "Wire Transfer" },
+      { date: "2025-10-20", bank: "East West Bank", sender: "Angela Wood", amount: "$21,700", type: "Withdraw" },
+      { date: "2025-10-25", bank: "First Commonwealth Bank", sender: "Samuel Barnes", amount: "$44,200", type: "Transfer" }
+    ];
+
+    let visibleCount = 10; // Initially visible transactions
+    const increment = 5;   // Transactions to load each time
+
+    function renderTransactions(initialLoad = true) {
+      const tbody = document.getElementById("transactionBody");
+      
+      const startIndex = initialLoad ? 0 : visibleCount - increment;
+      const endIndex = visibleCount;
+      const newTransactions = transactions.slice(startIndex, endIndex);
+
+      newTransactions.forEach((t, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${startIndex + index + 1}</td>
+          <td>${t.date}</td>
+          <td>${t.bank}</td>
+          <td>${t.sender}</td>
+          <td>${t.amount}</td>
+          <td>${t.type}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // Hide Load More button if all transactions are loaded
+      if (visibleCount >= transactions.length) {
+        document.getElementById("loadMoreBtn").style.display = "none";
+        document.getElementById("endMessage").style.display = "block";
+      }
+    }
+
+    document.getElementById("loadMoreBtn").addEventListener("click", () => {
+      visibleCount += increment;
+      renderTransactions(false); // false: append new rows, don’t clear
+    });
+
+    // Initial render
+    renderTransactions();
+
+  window.addEventListener('load', () => {
+  // Animate balance cards
+  const balanceCards = document.querySelectorAll('.balance-card');
+  balanceCards.forEach((card, index) => {
+    card.style.animationDelay = `${index * 0.2}s`;
+  });
+
+  // Animate action buttons
+  const actionBtns = document.querySelectorAll('.action-buttons a');
+  actionBtns.forEach((btn, index) => {
+    btn.style.animationDelay = `${index * 0.1 + 0.3}s`; // starts slightly after balance cards
+  });
+
+  // Animate service cards
+  const serviceCards = document.querySelectorAll('.service-card');
+  serviceCards.forEach((card, index) => {
+    card.style.animationDelay = `${index * 0.15 + 0.5}s`; // starts after action buttons
+  });
+});
+</script>
+<script src="darkmode.js"></script>
 
 </body>
 </html>
