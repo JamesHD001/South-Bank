@@ -122,6 +122,37 @@
       animation: fadeSlideUp 0.4s ease-out forwards;
     }
 
+    .month-row td {
+      background: #eef2f6;
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 15px;
+      color: #444;
+    }
+
+    body.dark .month-row td {
+      background: #1f1f1f;
+      color: #ccc;
+    }
+
+    tr.credit td {
+      color: #1e7f5c;
+      font-weight: 600;
+    }
+
+    tr.debit td {
+      color: #c0392b;
+      font-weight: 600;
+    }
+
+    body.dark tr.credit td {
+      color: #4cd9a0;
+    }
+
+    body.dark tr.debit td {
+      color: #ff6b6b;
+    }
+
     /* Responsive: stack buttons on small screens */
     @media screen and (max-width: 768px) {
       .action-buttons {
@@ -450,65 +481,96 @@
       { date: "2025-10-20", bank: "East West Bank", sender: "Angela Wood", amount: "$21,700", type: "Withdraw" },
       { date: "2025-10-25", bank: "First Commonwealth Bank", sender: "Samuel Barnes", amount: "$44,200", type: "Transfer" }
     ];
+    let visibleCount = 10;
+    const increment = 10;
+    let lastRenderedMonth = null;
+    let rowCounter = 0;
 
-    let visibleCount = 10; // Initially visible transactions
-    const increment = 5;   // Transactions to load each time
-    transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const CREDIT_TYPES = ["Deposit", "Receive"];
+    const DEBIT_TYPES = ["Withdraw" , "Transfer", "ACH", "Wire Transfer"];
 
-    function renderTransactions(initialLoad = true) {
+    function renderTransactions(initialLoad = false) {
       const tbody = document.getElementById("transactionBody");
-      
+
+      if (initialLoad) {
+        tbody.innerHTML = "";
+        lastRenderedMonth = null;
+        rowCounter = 0;
+      }
+
       const startIndex = initialLoad ? 0 : visibleCount - increment;
-      const endIndex = visibleCount;
+      const endIndex = Math.min(visibleCount, transactions.length);
       const newTransactions = transactions.slice(startIndex, endIndex);
 
-      newTransactions.forEach((t, index) => {
+      newTransactions.forEach((t) => {
+        const dateObj = new Date(t.date);
+        const monthYear = dateObj.toLocaleString("en-US", {
+          month: "long",
+          year: "numeric"
+        });
+
+        // Month header
+        if (monthYear !== lastRenderedMonth) {
+          const monthRow = document.createElement("tr");
+          monthRow.className = "month-row";
+          monthRow.innerHTML = `<td colspan="6">${monthYear}</td>`;
+          tbody.appendChild(monthRow);
+          lastRenderedMonth = monthYear;
+        }
+
+        rowCounter++;
+
         const row = document.createElement("tr");
+
+        if (CREDIT_TYPES.includes(t.type)) row.classList.add("credit");
+        if (DEBIT_TYPES.includes(t.type)) row.classList.add("debit");
+
         row.innerHTML = `
-          <td>${startIndex + index + 1}</td>
+          <td>${rowCounter}</td>
           <td>${t.date}</td>
           <td>${t.bank}</td>
           <td>${t.sender}</td>
           <td>${t.amount}</td>
           <td>${t.type}</td>
         `;
+
         tbody.appendChild(row);
       });
 
-      // Hide Load More button if all transactions are loaded
+      // Load More visibility
       if (visibleCount >= transactions.length) {
         document.getElementById("loadMoreBtn").style.display = "none";
         document.getElementById("endMessage").style.display = "block";
       }
     }
 
-    document.getElementById("loadMoreBtn").addEventListener("click", () => {
-      visibleCount += increment;
-      renderTransactions(false); // false: append new rows, don’t clear
+      document.getElementById("loadMoreBtn").addEventListener("click", () => {
+        visibleCount += increment;
+        renderTransactions(false);
+      });
+
+      // Initial render
+      renderTransactions(true);
+
+      window.addEventListener('load', () => {
+      // Animate balance cards
+      const balanceCards = document.querySelectorAll('.balance-card');
+      balanceCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.2}s`;
+      });
+
+      // Animate action buttons
+      const actionBtns = document.querySelectorAll('.action-buttons a');
+      actionBtns.forEach((btn, index) => {
+        btn.style.animationDelay = `${index * 0.1 + 0.3}s`; // starts slightly after balance cards
+      });
+
+      // Animate service cards
+      const serviceCards = document.querySelectorAll('.service-card');
+      serviceCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.15 + 0.5}s`; // starts after action buttons
+      });
     });
-
-    // Initial render
-    renderTransactions();
-
-  window.addEventListener('load', () => {
-  // Animate balance cards
-  const balanceCards = document.querySelectorAll('.balance-card');
-  balanceCards.forEach((card, index) => {
-    card.style.animationDelay = `${index * 0.2}s`;
-  });
-
-  // Animate action buttons
-  const actionBtns = document.querySelectorAll('.action-buttons a');
-  actionBtns.forEach((btn, index) => {
-    btn.style.animationDelay = `${index * 0.1 + 0.3}s`; // starts slightly after balance cards
-  });
-
-  // Animate service cards
-  const serviceCards = document.querySelectorAll('.service-card');
-  serviceCards.forEach((card, index) => {
-    card.style.animationDelay = `${index * 0.15 + 0.5}s`; // starts after action buttons
-  });
-});
 </script>
 <script src="darkmode.js"></script>
 
