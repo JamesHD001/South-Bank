@@ -216,3 +216,71 @@ body.dark .top-bar-select {
 body.dark .top-bar-right a:hover {
   background: #1e4d3a;
 }
+
+body.dark {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+body.dark .top-bar {
+    background: linear-gradient(90deg, #0d2a18, #1e1e1e);
+    color: #e0e0e0;
+}
+
+body.dark .top-bar a {
+    color: #ffffff;
+    background: rgb(85, 85, 85);
+}
+
+body.dark .top-bar a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+body.dark .page-header h1 {
+    color: #2fa37b;
+}
+
+body.dark .page-header p {
+    color: #b0b0b0;
+}
+
+body.dark .transfer-card {
+    background: #1e1e1e;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+body.dark .form-section h3 {
+    color: #2fa37b;
+}
+
+body.dark label {
+    color: #e0e0e0;
+}
+
+body.dark input {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: #e0e0e0;
+    caret-color: #2fa37b;
+}
+
+body.dark input::placeholder {
+    color: #888;
+}
+
+body.dark .form-action button {
+    background: #2fa37b;
+    color: #fff;
+}
+
+body.dark .form-action button:hover {
+    background: #1e4d3a;
+}
+
+body.dark .hint {
+    color: #aaa;
+}
+
+body.dark .back-link {
+    color: #2fa37b;
+}
