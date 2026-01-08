@@ -181,11 +181,16 @@
 
     <form action="update-settings.php" method="post">
       <!-- Account Info -->
+      <div class="section-title">Update Profile Photo</div>
+      <div class="form-group">
+        <input type="file" disabled id="file-upload" value="Upload a new photo" placeholder="">
+        <small>You updated your photo last <strong>month</strong>, wait <strong>3 months</strong> to upload new photo</small>
+      </div>
       <div class="section-title">Account Info</div>
       <div class="form-group">
-        <input type="text" id="full-name" name="full-name" value="William Richard" readonly placeholder=" ">
+        <input type="text" id="full-name" name="full-name" value="James Lay" readonly placeholder=" ">
         <label for="full-name">Full Name</label>
-        <small>Contact the bank to update</small>
+        <small>Can't update info at this time</small>
       </div>
       <div class="form-group">
         <input type="email" id="email" name="email" value="william.richard@hotmail.com" readonly placeholder=" ">
@@ -193,7 +198,7 @@
         <small>Contact the bank to update</small>
       </div>
       <div class="form-group">
-        <input type="tel" id="phone" name="phone" value="+1 357 945 7322" readonly placeholder=" ">
+        <input type="tel" id="phone" name="phone" value="+1 304 301 8556" readonly placeholder=" ">
         <label for="phone">Phone Number</label>
         <small>Contact the bank to update</small>
       </div>
