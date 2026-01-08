@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Account Verification Required</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="darkmode.css">
+  <style>
+    * {
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: #f5f7fa;
+        color: #1a1a1a;
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 25px;
+        background: linear-gradient(90deg, #1e4d3a, #2fa37b);
+        color: #fff;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+    .top-bar .right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .top-bar a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        background: rgba(255,255,255,0.15);
+        padding: 8px 14px;
+        border-radius: 8px;
+        transition: 0.2s;
+    }
+
+    .top-bar a:hover {
+        background: rgba(255,255,255,0.25);
+    }
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    /* =========================
+                LAYOUT
+    ========================= */
+    .page {
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 0 15px;
+        animation: fadeUp 0.6s ease;
+    }
+
+    .verify-card {
+        background: white;
+        padding: 40px;
+        border-radius: 22px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+    .icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        color: #1e4d3a;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        color: #555;
+        margin-bottom: 25px;
+    }
+
+    .info-box {
+        background: #f1f5f9;
+        padding: 20px;
+        border-radius: 14px;
+        text-align: left;
+        margin-bottom: 25px;
+    }
+
+    .info-box ul {
+        margin-top: 10px;
+        padding-left: 18px;
+    }
+
+    .info-box li {
+        margin-bottom: 6px;
+    }
+
+    .contact-box {
+        margin-bottom: 25px;
+    }
+
+    .contact-box h3 {
+        color: #2fa37b;
+        margin-bottom: 12px;
+    }
+
+    .contact-item {
+        background: #f8fafc;
+        padding: 12px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+    }
+
+    .note {
+        font-size: 0.85em;
+        color: #777;
+        margin-bottom: 20px;
+    }
+
+    .back-link {
+        text-decoration: none;
+        color: #2fa37b;
+        font-weight: 500;
+    }
+
+        /* =========================
+        ANIMATION
+        ========================= */
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(25px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+        /* =========================
+        MOBILE
+        ========================= */
+    @media (max-width: 600px) {
+        .verify-card {
+            padding: 30px 22px;
+        }
+    }
+    body.dark .verify-card {
+        background: #1e1e1e;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+    }
+
+    body.dark .info-box,
+    body.dark .contact-item {
+        background: #2a2a2a;
+    }
+
+    body.dark .subtitle,
+    body.dark .note {
+        color: #b0b0b0;
+    }
+
+    body.dark h1 {
+        color: #2fa37b;
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="top-bar">
+  <strong>South International Bank</strong>
+
+    <div class="right">
+      <div class="theme-slider">
+        <label class="theme-toggle">
+          <input type="checkbox" id="themeSwitch">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <a href="settings.html">Settings</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+</header>
+
+<main class="page">
+
+  <section class="verify-card">
+    <div class="icon">🔒</div>
+
+    <h1>Account Verification Required</h1>
+    <p class="subtitle">
+      Your account is currently restricted for security reasons.
+    </p>
+
+    <div class="info-box">
+      <p>
+        To protect your account and comply with banking regulations,
+        we require additional identity verification before you can
+        perform transactions.
+      </p>
+
+      <ul>
+        <li>Government-issued ID</li>
+        <li>Proof of address</li>
+        <li>Recent passport photograph</li>
+      </ul>
+    </div>
+
+    <div class="contact-box">
+      <h3>How to Verify</h3>
+
+      <div class="contact-item">
+        📞 <strong>Live Support:</strong> +1 (800) 555-0199
+      </div>
+
+      <div class="contact-item">
+        🏦 <strong>Visit a Branch:</strong> Bring valid documents to the nearest branch
+      </div>
+    </div>
+
+    <div class="note">
+      Online verification is currently unavailable for your account.
+    </div>
+
+    <a href="dashboard.html" class="back-link">← Return to Dashboard</a>
+  </section>
+
+</main>
+
+<script src="darkmode.js"></script>
+<script>
+  function logout() {
+    sessionStorage.removeItem("loggedIn");
+    window.location.href = "auth/login.html";
+  }
+</script>
+
+</body>
+</html>

@@ -94,27 +94,51 @@
 
   <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
 
+  <!-- Verification Required Modal -->
+  <div class="modal-overlay" id="verificationModal">
+    <div class="modal">
+      <h2>Additional Verification Required</h2>
+      <p>
+        For security reasons, you must complete additional verification
+        before you can make transfers.
+      </p>
+
+      <div class="modal-actions">
+        <button class="secondary-btn" id="closeModal">Cancel</button>
+        <button class="primary-btn" onclick="goToVerification()">Verify Now</button>
+      </div>
+    </div>
+  </div>
+
+
 </main>
 
 <script src="darkmode.js"></script>
 <script>
-  function logout() {
-    sessionStorage.removeItem("loggedIn");
-    window.location.href = "auth/login.html";
-  }
+  const modal = document.getElementById("verificationModal");
+  const closeModal = document.getElementById("closeModal");
 
-  // Optional simulation of submit
-  const submitBtn = document.getElementById("submitBtn");
   submitBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    submitBtn.textContent = "Processing...";
-    submitBtn.disabled = true;
-    setTimeout(() => {
-      alert("Transfer submitted successfully (simulation).");
-      submitBtn.textContent = "Continue";
-      submitBtn.disabled = false;
-    }, 1500);
+
+    // Simple validation check
+    if (!recipient.value || !bank.value || !account.value || !routing.value || !amount.value) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    // Block transaction & show modal
+    modal.classList.add("active");
   });
+
+  closeModal.addEventListener("click", () => {
+    modal.classList.remove("active");
+  });
+
+  function goToVerification() {
+    window.location.href = "verification.html";
+  }
+
 </script>
 
 </body>

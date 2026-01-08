@@ -194,6 +194,82 @@ input:focus {
 }
 
 /* =========================
+   MODAL
+========================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: 18px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  animation: popIn 0.3s ease;
+}
+
+.modal h2 {
+  margin-bottom: 12px;
+  color: #1e4d3a;
+}
+
+.modal p {
+  color: #555;
+  font-size: 0.95em;
+}
+
+.modal-actions {
+  margin-top: 25px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.primary-btn {
+  background: #2fa37b;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background: #1e4d3a;
+}
+
+.secondary-btn {
+  background: #e5e7eb;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+
+/* =========================
     MOBILE
 ========================= */
 @media (max-width: 700px) {
