@@ -221,7 +221,7 @@
 
                                          <li>
                                     <a href="auth/login.html">
-                                        <span class="icon-signing">Login To Online Banking</span>
+                                        <span class="icon-signing">OnlineBanking Login</span>
                                     </a>
                                 </li>
                             </div>
@@ -435,8 +435,9 @@
 
                         <script type="text/javascript"
                             src="../s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-                                {
-                                    "symbols": [
+                                (function() {
+                                    var config = {
+                                        "symbols": [
                                         {
                                             "proName": "FOREXCOM:SPXUSD",
                                             "title": "S&P 500 Index"
@@ -487,7 +488,7 @@
                                         },
                                         {
                                             "description": "",
-                                            "proName": "FX_IDC:USDPHP"
+                                        "proName": "FX_IDC:USDPHP"
                                         }
                                     ],
                                         "showSymbolLogo": true,
@@ -495,7 +496,8 @@
                                                 "displayMode": "adaptive",
                                                     "colorTheme": "dark",
                                                         "locale": "en"
-                                }
+                                };
+                            })();
                             </script>
                     </div>
                     <!-- TradingView Widget END -->
