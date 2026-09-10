@@ -2,94 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deposit Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deposit Funds</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="darkmode.css">
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #eef3f7;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: #fff;
-      padding: 30px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      border-radius: 10px;
-    }
-    h2 {
-      text-align: center;
-      color: #0077b6;
-      margin-bottom: 30px;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-      color: #333;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-    textarea {
-      resize: vertical;
-    }
-    button {
-      background-color: #0077b6;
-      color: white;
-      padding: 12px 18px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #023e8a;
-    }
-    .back-link {
-      display: block;
-      margin-top: 20px;
-      text-align: center;
-      color: #0077b6;
-      text-decoration: none;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
+    body{min-height:100vh;background:#f5f7fa;color:#1a1a1a}
+    .top-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 25px;background:linear-gradient(90deg,#1e4d3a,#2fa37b);color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+    .right{display:flex;align-items:center;gap:12px}.top-bar a{color:#fff;text-decoration:none;font-weight:500;background:rgba(255,255,255,.14);padding:8px 14px;border-radius:9px;transition:.2s}.top-bar a:hover{background:rgba(255,255,255,.25)}
+    .theme-toggle{display:flex;align-items:center}.theme-toggle input{display:none}.toggle-slider{width:40px;height:20px;background:rgba(255,255,255,.35);border-radius:20px;position:relative;cursor:pointer}.toggle-slider:before{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .25s}.theme-toggle input:checked+.toggle-slider:before{transform:translateX(20px)}
+    .page{width:min(900px,calc(100% - 30px));margin:42px auto;animation:fadeUp .5s ease}.page-header{margin-bottom:24px}.page-header h1{font-size:1.85rem;color:#1e4d3a}.page-header p{margin-top:6px;color:#6b7280}
+    .action-card{background:#fff;border:1px solid #edf0f2;border-radius:18px;padding:34px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+    .form-section{margin-bottom:28px;padding-bottom:26px;border-bottom:1px solid #edf0f2}.form-section:last-of-type{margin-bottom:0;padding-bottom:0;border-bottom:0}.form-section h3{color:#2fa37b;font-size:1rem;margin-bottom:16px}.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+    label{display:block;font-size:.84rem;font-weight:600;margin-bottom:7px;color:#374151}input,textarea{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:12px 14px;font-size:.94rem;background:#fff;color:#1f2937;transition:.2s}textarea{min-height:100px;resize:vertical}input:focus,textarea:focus{outline:none;border-color:#2fa37b;box-shadow:0 0 0 3px rgba(47,163,123,.12)}
+    .form-action{border-top:1px solid #edf0f2;padding-top:25px;text-align:center}.form-action button{border:0;border-radius:12px;padding:14px 38px;background:#2fa37b;color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;box-shadow:0 6px 15px rgba(47,163,123,.18);transition:.2s}.form-action button:hover{background:#1e4d3a;transform:translateY(-2px)}.hint{margin-top:10px;font-size:.8rem;color:#777}.back-link{display:block;margin-top:22px;color:#2fa37b;text-decoration:none;font-weight:500}.back-link:hover{text-decoration:underline}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:700px){.top-bar{padding:12px 16px}.right{gap:7px}.top-bar strong{font-size:.88rem}.top-bar a{padding:7px 9px;font-size:.78rem}.page{width:min(100% - 20px,900px);margin:28px auto}.page-header h1{font-size:1.5rem}.action-card{padding:24px 18px;border-radius:16px}.grid-2{grid-template-columns:1fr;gap:16px}.form-action button{width:100%}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Deposit Funds</h2>
-    <form action="deposit-form-submit.php" method="post">
-      <label for="depositor">Depositor Name</label>
-      <input type="text" id="depositor" name="depositor" placeholder="e.g. Keanu Charles Reeves" required />
+  <header class="top-bar">
+    <strong>South International Bank</strong>
+    <div class="right">
+      <label class="theme-toggle" aria-label="Toggle dark mode"><input type="checkbox" id="themeSwitch"><span class="toggle-slider"></span></label>
+      <a href="settings.html">Settings</a>
+      <a href="#" onclick="logout();return false;">Logout</a>
+    </div>
+  </header>
 
-      <label for="account-holder">Account Holder Name</label>
-      <input type="text" id="account-holder" name="account-holder" placeholder="e.g. Emily Carter" required />
+  <main class="page">
+    <section class="page-header">
+      <h1>Deposit Funds</h1>
+      <p>Provide the deposit details below to submit a funding request.</p>
+    </section>
 
-      <label for="bank">Bank Name</label>
-      <input type="text" id="bank" name="bank" placeholder="e.g. CitiBank" required />
+    <section class="action-card">
+      <div class="form-section">
+        <h3>Depositor Information</h3>
+        <div class="grid-2">
+          <div><label for="depositor">Depositor Name</label><input type="text" id="depositor" placeholder="Keanu Charles Reeves" required></div>
+          <div><label for="holder">Account Holder Name</label><input type="text" id="holder" placeholder="Emily Carter" required></div>
+        </div>
+      </div>
 
-      <label for="account-number">Account Number</label>
-      <input type="text" id="account-number" name="account-number" placeholder="e.g. 1234567890" required />
+      <div class="form-section">
+        <h3>Bank Details</h3>
+        <div class="grid-2">
+          <div><label for="bank">Bank Name</label><input type="text" id="bank" placeholder="e.g. CitiBank" required></div>
+          <div><label for="account">Account Number</label><input type="text" id="account" placeholder="1234567890" required></div>
+        </div>
+      </div>
 
-      <label for="amount">Amount (USD)</label>
-      <input type="number" id="amount" name="amount" placeholder="e.g. 5000" required />
+      <div class="form-section">
+        <h3>Deposit Details</h3>
+        <div class="grid-2">
+          <div><label for="amount">Amount (USD)</label><input type="number" id="amount" placeholder="5000" required></div>
+          <div><label for="description">Description (optional)</label><input type="text" id="description" placeholder="Optional note"></div>
+        </div>
+      </div>
 
-      <label for="description">Description / Note (optional)</label>
-      <textarea id="description" name="description" rows="3" placeholder="Optional note or description..."></textarea>
+      <div class="form-action">
+        <button type="button" id="depositBtn">Continue</button>
+        <p class="hint">You’ll review this deposit request before final submission.</p>
+      </div>
+    </section>
 
-      <button type="submit">Submit Deposit</button>
-    </form>
     <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
-  </div>
+  </main>
+
+  <script src="darkmode.js"></script>
+  <script>
+    function logout(){sessionStorage.removeItem("loggedIn");window.location.href="auth/login.html";}
+    document.getElementById("depositBtn").addEventListener("click",()=>{
+      const required=["depositor","holder","bank","account","amount"];
+      if(!required.every(id=>document.getElementById(id).value.trim())){alert("Please fill all required fields.");return;}
+      alert("Deposit request submitted successfully (simulation).");
+    });
+  </script>
 </body>
 </html>
