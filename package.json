@@ -1,0 +1,12 @@
+{
+  "name": "south-bank",
+  "version": "1.0.0",
+  "private": true,
+  "description": "South Bank web application",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

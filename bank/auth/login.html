@@ -101,26 +101,26 @@
   </div>
 
   <script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
-      event.preventDefault(); // Prevent form from submitting
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const error = document.getElementById("error");
+      error.style.display = "none";
 
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
-
-      if (username === "James.lay1023" && password === "1lay.james23") {
-        // Store login state in session
-        sessionStorage.setItem("loggedIn", true);
-
-        // Try dashboard.html first; fallback to index.html if not found
-        fetch("../dashboard.html").then(response => {
-          if (response.ok) {
-            window.location.href = "../dashboard.html";
-          } else {
-            window.location.href = "../index.html";
-          }
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: document.getElementById("username").value.trim(),
+            password: document.getElementById("password").value
+          })
         });
-      } else {
-        document.getElementById("error").style.display = "block";
+        if (!response.ok) throw new Error("Login failed");
+        sessionStorage.setItem("loggedIn", "true");
+        window.location.href = "../dashboard.html";
+      } catch {
+        error.textContent = "Invalid Username or Password";
+        error.style.display = "block";
       }
     });
   </script>
