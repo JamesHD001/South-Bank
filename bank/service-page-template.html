@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>South International Bank Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="darkmode.css">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
+    body{min-height:100vh;background:#f5f7fa;color:#1a1a1a}
+    .top-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 25px;background:linear-gradient(90deg,#1e4d3a,#2fa37b);color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+    .right{display:flex;align-items:center;gap:12px}.top-bar a{color:#fff;text-decoration:none;font-weight:500;background:rgba(255,255,255,.14);padding:8px 14px;border-radius:9px}.top-bar a:hover{background:rgba(255,255,255,.25)}
+    .theme-toggle{display:flex;align-items:center}.theme-toggle input{display:none}.toggle-slider{width:40px;height:20px;background:rgba(255,255,255,.35);border-radius:20px;position:relative;cursor:pointer}.toggle-slider:before{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .25s}.theme-toggle input:checked+.toggle-slider:before{transform:translateX(20px)}
+    .page{width:min(900px,calc(100% - 30px));margin:42px auto;animation:fadeUp .5s ease}.page-header{margin-bottom:24px}.page-header h1{font-size:1.85rem;color:#1e4d3a}.page-header p{margin-top:6px;color:#6b7280}.action-card{background:#fff;border:1px solid #edf0f2;border-radius:18px;padding:34px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+    .form-section{margin-bottom:28px;padding-bottom:26px;border-bottom:1px solid #edf0f2}.form-section:last-of-type{margin-bottom:0;padding-bottom:0;border-bottom:0}.form-section h3{color:#2fa37b;font-size:1rem;margin-bottom:16px}.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.field{min-width:0}label{display:block;font-size:.84rem;font-weight:600;margin-bottom:7px;color:#374151}input,select,textarea{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:12px 14px;font-size:.94rem;background:#fff;color:#1f2937;transition:.2s}textarea{min-height:100px;resize:vertical}input:focus,select:focus,textarea:focus{outline:none;border-color:#2fa37b;box-shadow:0 0 0 3px rgba(47,163,123,.12)}
+    .form-action{border-top:1px solid #edf0f2;padding-top:25px;text-align:center}.form-action button{border:0;border-radius:12px;padding:14px 38px;background:#2fa37b;color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;box-shadow:0 6px 15px rgba(47,163,123,.18);transition:.2s}.form-action button:hover{background:#1e4d3a;transform:translateY(-2px)}.hint{margin-top:10px;font-size:.8rem;color:#777}.back-link{display:block;margin-top:22px;color:#2fa37b;text-decoration:none;font-weight:500}
+    .modal-overlay{position:fixed;inset:0;background:rgba(8,20,14,.62);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:.2s;z-index:1000}.modal-overlay.active{opacity:1;visibility:visible}.modal{width:min(460px,100%);background:#fff;border-radius:18px;padding:30px;box-shadow:0 20px 60px rgba(0,0,0,.25);transform:translateY(15px);transition:.2s}.modal-overlay.active .modal{transform:translateY(0)}.modal h2{color:#1e4d3a;margin-bottom:10px}.modal p{color:#5b6470;line-height:1.6}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}.modal-actions button{border:0;border-radius:10px;padding:11px 18px;font-weight:600;cursor:pointer}.secondary-btn{background:#edf0f2;color:#374151}.primary-btn{background:#2fa37b;color:#fff}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:700px){.top-bar{padding:12px 16px}.top-bar strong{font-size:.88rem}.right{gap:7px}.top-bar a{padding:7px 9px;font-size:.78rem}.page{width:min(100% - 20px,900px);margin:28px auto}.page-header h1{font-size:1.5rem}.action-card{padding:24px 18px;border-radius:16px}.grid-2{grid-template-columns:1fr;gap:16px}.form-action button{width:100%}.modal{padding:24px}.modal-actions{flex-direction:column}.modal-actions button{width:100%}}
+  </style>
+</head>
+<body>
+<header class="top-bar"><strong>South International Bank</strong><div class="right"><label class="theme-toggle" aria-label="Toggle dark mode"><input type="checkbox" id="themeSwitch"><span class="toggle-slider"></span></label><a href="settings.html">Settings</a><a href="#" onclick="logout();return false;">Logout</a></div></header>
+<main class="page">
+<section class="page-header"><h1>Service Title</h1><p>Complete the details below to continue securely.</p></section>
+<section class="action-card">
+<div class="form-section"><h3>Account Information</h3><div class="grid-2"><div class="field"><label for="name">Account Holder Name</label><input id="name" placeholder="James Lay" required></div><div class="field"><label for="account">Account Number</label><input id="account" placeholder="8787504713" required></div></div></div>
+<div class="form-section"><h3>Service Details</h3><div class="grid-2"><div class="field"><label for="provider">Provider / Recipient</label><input id="provider" placeholder="Service provider" required></div><div class="field"><label for="reference">Reference Number</label><input id="reference" placeholder="Reference number" required></div><div class="field"><label for="amount">Amount (USD)</label><input id="amount" type="number" placeholder="500" required></div><div class="field"><label for="note">Description (optional)</label><input id="note" placeholder="Optional note"></div></div></div>
+<div class="form-action"><button type="button" id="continueBtn">Continue</button><p class="hint">Your request will require additional verification before completion.</p></div>
+</section>
+<a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+</main>
+<div class="modal-overlay" id="verificationModal"><div class="modal"><h2>Additional Verification Required</h2><p>For security reasons, additional verification is required before this transaction can be completed. Please contact South International Bank customer support or visit your nearest branch with valid documents.</p><div class="modal-actions"><button class="secondary-btn" id="closeModal">Cancel</button><button class="primary-btn" onclick="goToVerification()">Verification Details</button></div></div></div>
+<script src="darkmode.js"></script><script>
+function logout(){sessionStorage.removeItem('loggedIn');sessionStorage.removeItem('username');window.location.href='auth/login.html';}
+const modal=document.getElementById('verificationModal');
+document.getElementById('continueBtn').addEventListener('click',()=>{const required=['name','account','provider','reference','amount'];if(!required.every(id=>document.getElementById(id).value.trim())){alert('Please fill all required fields.');return;}modal.classList.add('active');});
+document.getElementById('closeModal').addEventListener('click',()=>modal.classList.remove('active'));
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('active')});
+function goToVerification(){window.location.href='verification.html';}
+</script>
+</body>
+</html>
