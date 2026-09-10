@@ -1,129 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>South Online Banking || Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #eef3f7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .login-container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 100%;
-    }
-    h2 {
-      text-align: center;
-      color: #1F1B44;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #1F1B44;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background-color: #151136;
-    }
-    .error-message {
-      color: red;
-      text-align: center;
-      margin-bottom: 15px;
-      display: none;
-    }
-    .back-home {
-      text-align: center;
-      margin-top: 15px;
-    }
-    .back-home a button {
-      width: auto;
-      padding: 10px 20px;
-      background-color: #076145;
-      color: hsl(206, 33%, 96%);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .back-home a button:hover {
-      background-color: #bbb;
-    }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>South Online Banking | Login</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#eef6f2,#f5f7fa);color:#17231d}.login-container{width:min(420px,100%);background:#fff;border:1px solid #e5ebe8;border-radius:22px;padding:34px;box-shadow:0 18px 50px #153d2a18}.brand{text-align:center;margin-bottom:26px}.brand img{width:58px;height:58px;object-fit:contain}.brand h1{font-size:1.45rem;color:#1e4d3a;margin:10px 0 4px}.brand p{margin:0;color:#6b7280;font-size:.88rem}label{display:block;font-size:.84rem;font-weight:600;margin:0 0 7px;color:#374151}input{width:100%;padding:13px 14px;border:1px solid #d1d5db;border-radius:11px;font-size:.95rem;margin-bottom:17px}input:focus{outline:0;border-color:#2fa37b;box-shadow:0 0 0 3px #2fa37b1f}button{width:100%;padding:13px;border:0;border-radius:11px;background:#2fa37b;color:#fff;font-weight:600;font-size:.95rem;cursor:pointer}button:hover{background:#1e4d3a}.error-message{display:none;margin-bottom:15px;padding:11px 12px;border-radius:10px;background:#fee2e2;color:#991b1b;border:1px solid #fecaca;text-align:center;font-size:.85rem}.back-home{margin-top:15px;text-align:center}.back-home a{color:#2fa37b;text-decoration:none;font-size:.88rem}.demo-note{margin-top:18px;text-align:center;font-size:.74rem;color:#8a938e;line-height:1.5}
+</style>
 </head>
 <body>
-
-  <div class="login-container">
-    <h2>Login</h2>
-    <div class="error-message" id="error">Invalid Username or Password</div>
-    <form id="loginForm" autocomplete="off">
-      <label for="username" style="color: #023e8a;">Username</label>
-      <input type="text" id="username" placeholder="Enter Username" required autocomplete="off">
-
-      <label for="password" style="color: #023e8a;">Password</label>
-      <input type="password" id="password" placeholder="Enter Password" required autocomplete="off">
-
-      <button type="submit">Login</button>
-    </form>
-
-    <!-- Back Home Button -->
-    <div class="back-home">
-      <a href="../index.html">
-        <button type="button">Back Home</button>
-      </a>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", async function(event) {
-      event.preventDefault();
-      const error = document.getElementById("error");
-      error.style.display = "none";
-
-      try {
-        const response = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            username: document.getElementById("username").value.trim(),
-            password: document.getElementById("password").value
-          })
-        });
-        if (!response.ok) throw new Error("Login failed");
-        sessionStorage.setItem("loggedIn", "true");
-        window.location.href = "../dashboard.html";
-      } catch {
-        error.textContent = "Invalid Username or Password";
-        error.style.display = "block";
-      }
-    });
-  </script>
-
+<div class="login-container">
+<div class="brand"><img src="bank--logo.png" alt="South International Bank"><h1>South International Bank</h1><p>Secure Online Banking</p></div>
+<div class="error-message" id="error" role="alert"></div>
+<form id="loginForm" autocomplete="off"><label for="username">Username</label><input id="username" type="text" placeholder="Enter username" required autocomplete="username"><label for="password">Password</label><input id="password" type="password" placeholder="Enter password" required autocomplete="current-password"><button type="submit" id="loginBtn">Sign In</button></form>
+<div class="back-home"><a href="../index.html">← Back Home</a></div>
+<p class="demo-note">Static GitHub Pages demo. Authentication is simulated client-side for learning purposes.</p>
+</div>
+<script>
+document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();const error=document.getElementById('error'),btn=document.getElementById('loginBtn');error.style.display='none';btn.disabled=true;btn.textContent='Signing in...';try{const response=await fetch('../../data/accounts.json');if(!response.ok)throw new Error();const accounts=await response.json();const username=document.getElementById('username').value.trim();const password=document.getElementById('password').value;const account=accounts[username];if(!account||account.password!==password)throw new Error('Invalid');sessionStorage.setItem('loggedIn','true');sessionStorage.setItem('username',username);sessionStorage.setItem('withdrawalLocked',String(account.withdrawalLocked===true));location.href='../dashboard.html'}catch(err){error.textContent='Invalid Username or Password';error.style.display='block'}finally{btn.disabled=false;btn.textContent='Sign In'}});
+</script>
 </body>
 </html>
