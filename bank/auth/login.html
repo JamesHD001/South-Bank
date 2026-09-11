@@ -13,7 +13,7 @@
 <div class="error-message" id="error" role="alert"></div>
 <form id="loginForm" autocomplete="off"><label for="username">Username</label><input id="username" type="text" placeholder="Enter username" required autocomplete="username"><label for="password">Password</label><input id="password" type="password" placeholder="Enter password" required autocomplete="current-password"><button type="submit" id="loginBtn">Sign In</button></form>
 <div class="back-home"><a href="../index.html">← Back Home</a></div>
-<p class="demo-note">Static GitHub Pages demo. Authentication is simulated client-side for learning purposes.</p>
+<p class="demo-note">Authentication is client-side.</p>
 </div>
 <script>
 document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();const error=document.getElementById('error'),btn=document.getElementById('loginBtn');error.style.display='none';btn.disabled=true;btn.textContent='Signing in...';try{const response=await fetch('../../data/accounts.json');if(!response.ok)throw new Error();const accounts=await response.json();const username=document.getElementById('username').value.trim();const password=document.getElementById('password').value;const account=accounts[username];if(!account||account.password!==password)throw new Error('Invalid');sessionStorage.setItem('loggedIn','true');sessionStorage.setItem('username',username);sessionStorage.setItem('withdrawalLocked',String(account.withdrawalLocked===true));location.href='../dashboard.html'}catch(err){error.textContent='Invalid Username or Password';error.style.display='block'}finally{btn.disabled=false;btn.textContent='Sign In'}});
