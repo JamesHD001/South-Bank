@@ -12,6 +12,10 @@
       "dest": "/api/index.js"
     },
     {
+      "src": "/data/(.*)",
+      "dest": "/data/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/bank/$1"
     }
