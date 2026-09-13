@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>South Bank — Investment Planner</title>
+    <link rel="stylesheet" href="bank-brand.css">
     <style>
         :root{
             --bg:#0f1724; --card:#0b1220; --muted:#9aa7b2;
@@ -70,8 +71,12 @@
 <body>
     <div class="container">
         <header>
+            <a class="bank-logo" href="dashboard.html" aria-label="South International Bank dashboard">
+                <span class="bank-logo-mark" aria-hidden="true"><span>SB</span></span>
+                <span class="bank-logo-copy"><span class="bank-logo-name">South International Bank</span><span class="bank-logo-tagline">Secure. Simple. Truly South Bank.</span></span>
+            </a>
             <div>
-                <h1>South Bank</h1>
+                <h1>Investment Planner</h1>
                 <p>Investment Planner — project growth & returns</p>
             </div>
             <div style="text-align:right">
@@ -158,8 +163,9 @@
                         </div>
                     </div>
 
-                    <footer>
+                    <footer class="bank-footer">
                         Assumes contributions are made at the end of each contribution period. Results are estimates.
+                        <nav class="bank-footer-links" aria-label="Legal links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a></nav>
                     </footer>
                 </div>
             </div>

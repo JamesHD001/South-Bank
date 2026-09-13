@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>South Bank — Investments</title>
+    <link rel="stylesheet" href="bank-brand.css">
     <style>
         :root{
             --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#2dd4bf; --glass: rgba(255,255,255,0.03);
@@ -63,8 +64,11 @@
 <body>
     <div class="wrap" role="application" aria-labelledby="pageTitle">
         <header>
+            <a class="bank-logo" href="dashboard.html" aria-label="South International Bank dashboard">
+                <span class="bank-logo-mark" aria-hidden="true"><span>SB</span></span>
+                <span class="bank-logo-copy"><span class="bank-logo-name">South International Bank</span><span class="bank-logo-tagline">Secure. Simple. Truly South Bank.</span></span>
+            </a>
             <div class="brand">
-                <div class="logo" aria-hidden="true">SB</div>
                 <div>
                     <h1 id="pageTitle">South Bank — Investments</h1>
                     <p class="lead">Grow your savings with simulated portfolios and instant return calculator.</p>
@@ -211,10 +215,9 @@
             </aside>
         </main>
 
-        <footer>
-            <div class="small">Simulated data only. Not financial advice. To invest 
-                <a href="main-investment.html">Click Here</a>
-            </div>
+        <footer class="bank-footer">
+            <div class="small">Simulated data only. Not financial advice. To invest <a href="main-investment.html">Click Here</a></div>
+            <nav class="bank-footer-links" aria-label="Legal links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a></nav>
         </footer>
     </div>
 
