@@ -18,6 +18,31 @@
       color: white; padding: 12px 25px;
       box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
+    .bank-logo {
+      display: inline-flex; align-items: center; gap: 11px;
+      color: white; text-decoration: none; min-width: max-content;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .bank-logo:hover { transform: translateY(-2px); opacity: 0.92; }
+    .bank-logo:focus-visible { outline: 3px solid #85edff; outline-offset: 5px; border-radius: 8px; }
+    .bank-logo-mark {
+      position: relative; display: grid; place-items: center;
+      width: 42px; height: 42px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.65); border-radius: 13px 13px 13px 4px;
+      background: linear-gradient(145deg, #dffcff, #85edff 45%, #2fa37b);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.75), 0 5px 12px rgba(0,0,0,0.2);
+    }
+    .bank-logo-mark::before,
+    .bank-logo-mark::after {
+      content: ''; position: absolute; width: 23px; height: 23px;
+      border: 3px solid #1e4d3a; border-left-color: transparent;
+      border-bottom-color: transparent; border-radius: 50%; transform: rotate(-45deg);
+    }
+    .bank-logo-mark::after { width: 11px; height: 11px; border-width: 2px; opacity: 0.8; }
+    .bank-logo-mark span { position: relative; z-index: 1; color: #1e4d3a; font-size: 13px; font-weight: 800; letter-spacing: -1px; }
+    .bank-logo-copy { display: flex; flex-direction: column; gap: 2px; }
+    .bank-logo-name { font-size: 1.02rem; font-weight: 700; letter-spacing: 0.01em; }
+    .bank-logo-tagline { color: rgba(255,255,255,0.78); font-size: 0.63rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
     .top-bar-select { padding: 6px 10px; border: none; border-radius: 6px; }
     .top-bar-right a {
       color: white; margin-left: 20px; text-decoration: none;
@@ -107,7 +132,7 @@
       width: 24px;
       height: 24px;
     }
-    
+
     /* Fade-slide animation for cards */
     @keyframes fadeSlideUp {
       0% { opacity: 0; transform: translateY(30px); }
@@ -233,7 +258,7 @@
         grid-template-columns: 1fr; /* one button per row on mobile */
       }
     }
-    
+
     /* Bounce Animation for Action Buttons */
     @keyframes bounce {
       0% { transform: translateY(0); }
@@ -289,7 +314,7 @@
     }
 
     .loadMoreBtn {
-      background:#2fa37b; color:white; padding:12px 25px; 
+      background:#2fa37b; color:white; padding:12px 25px;
       border:none; border-radius:8px; font-weight:600; cursor:pointer;
     }
     .loadMoreBtn:hover {
@@ -318,6 +343,15 @@
       .balance-container { flex-direction: column; gap: 15px; }
       .action-buttons { flex-direction: column; }
     }
+    @media screen and (max-width: 520px) {
+      .top-bar { padding: 10px 14px; }
+      .bank-logo-mark { width: 36px; height: 36px; border-radius: 11px 11px 11px 4px; }
+      .bank-logo-name { font-size: 0.86rem; }
+      .bank-logo-tagline { font-size: 0.52rem; }
+      .top-bar-right { gap: 8px; }
+      .top-bar-right a { margin-left: 0; padding: 7px 8px; font-size: 0.78rem; }
+      .top-bar-right select { display: none; }
+    }
   </style>
 
   <script>
@@ -336,7 +370,13 @@
 <body>
 
   <header class="top-bar">
-    <strong>South International Bank</strong>
+    <a class="bank-logo" href="dashboard.html" aria-label="South International Bank dashboard">
+      <span class="bank-logo-mark" aria-hidden="true"><span>SB</span></span>
+      <span class="bank-logo-copy">
+        <span class="bank-logo-name">South International Bank</span>
+        <span class="bank-logo-tagline">Secure. Simple. South.</span>
+      </span>
+    </a>
 
     <div class="top-bar-right">
       <select>
