@@ -1,0 +1,59 @@
+/* Shared South International Bank branding */
+.bank-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: #fff;
+  text-decoration: none;
+  min-width: max-content;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.bank-logo:hover { transform: translateY(-2px); opacity: .92; }
+.bank-logo:focus-visible { outline: 3px solid #85edff; outline-offset: 5px; border-radius: 8px; }
+.bank-logo-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 13px 13px 13px 4px;
+  background: linear-gradient(145deg,#dffcff,#85edff 45%,#2fa37b);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.75), 0 5px 12px rgba(0,0,0,.2);
+}
+.bank-logo-mark::before,.bank-logo-mark::after {
+  content: '';
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  border: 3px solid #1e4d3a;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  transform: rotate(-45deg);
+}
+.bank-logo-mark::after { width: 11px; height: 11px; border-width: 2px; opacity: .8; }
+.bank-logo-mark span { position: relative; z-index: 1; color: #1e4d3a; font-size: 13px; font-weight: 800; letter-spacing: -1px; }
+.bank-logo-copy { display: flex; flex-direction: column; gap: 2px; }
+.bank-logo-name { font-size: 1.02rem; font-weight: 700; letter-spacing: .01em; }
+.bank-logo-tagline { color: rgba(255,255,255,.82); font-size: .63rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+.bank-footer {
+  margin-top: 40px;
+  padding: 24px 20px;
+  background: #002d72;
+  color: #fff;
+  text-align: center;
+  font-size: .86rem;
+  line-height: 1.8;
+}
+.bank-footer a { color: #fff; font-weight: 600; text-underline-offset: 3px; }
+.bank-footer a:hover,.bank-footer a:focus-visible { color: #85edff; }
+.bank-footer-links { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; margin-top: 4px; }
+@media (max-width: 520px) {
+  .bank-logo-mark { width: 36px; height: 36px; border-radius: 11px 11px 11px 4px; }
+  .bank-logo-name { font-size: .86rem; }
+  .bank-logo-tagline { font-size: .52rem; }
+  .bank-footer { padding: 20px 14px; }
+}
+body.dark .bank-footer { background: #1e1e1e; color: #e0e0e0; }

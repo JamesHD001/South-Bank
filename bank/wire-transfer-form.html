@@ -7,6 +7,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="darkmode.css">
+  <link rel="stylesheet" href="bank-brand.css">
 
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
@@ -28,7 +29,10 @@
 </head>
 <body>
   <header class="top-bar">
-    <strong>South International Bank</strong>
+    <a class="bank-logo" href="dashboard.html" aria-label="South International Bank dashboard">
+      <span class="bank-logo-mark" aria-hidden="true"><span>SB</span></span>
+      <span class="bank-logo-copy"><span class="bank-logo-name">South International Bank</span><span class="bank-logo-tagline">Secure. Simple. Truly South Bank.</span></span>
+    </a>
     <div class="right">
       <label class="theme-toggle" aria-label="Toggle dark mode"><input type="checkbox" id="themeSwitch"><span class="toggle-slider"></span></label>
       <a href="settings.html">Settings</a>
@@ -75,6 +79,11 @@
 
     <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
   </main>
+
+  <footer class="bank-footer">
+    <div>&copy; 2025 South International Bank. All rights reserved.</div>
+    <nav class="bank-footer-links" aria-label="Legal links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a></nav>
+  </footer>
 
   <script src="darkmode.js"></script>
   <script>

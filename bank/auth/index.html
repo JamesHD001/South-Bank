@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>South Online Banking Dashboard</title>
+  <link rel="stylesheet" href="../bank-brand.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { background: #f4f4fc; color: #111; }
@@ -95,6 +96,10 @@
 <body>
 
   <header class="top-bar">
+    <a class="bank-logo" href="../dashboard.html" aria-label="South International Bank dashboard">
+      <span class="bank-logo-mark" aria-hidden="true"><span>SB</span></span>
+      <span class="bank-logo-copy"><span class="bank-logo-name">South International Bank</span><span class="bank-logo-tagline">Secure. Simple. Truly South Bank.</span></span>
+    </a>
     <div class="left">
       <img src="https://flagcdn.com/gb.svg" alt="UK Flag" class="flag">
       <select><option>English</option></select>
@@ -195,6 +200,10 @@
     <tr><td>30</td><td>2025-05-27</td><td>Truist Bank</td><td>Eric Edwards</td><td>$42,300</td><td>Deposit</td></tr>
   </tbody>
   </table>
+  <footer class="bank-footer">
+    <div>&copy; 2025 South International Bank. All rights reserved.</div>
+    <nav class="bank-footer-links" aria-label="Legal links"><a href="../privacy.html">Privacy Policy</a><a href="../terms.html">Terms of Use</a></nav>
+  </footer>
 
 </body>
 </html>

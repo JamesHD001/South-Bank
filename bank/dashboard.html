@@ -6,6 +6,7 @@
   <title>South Bank Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="darkmode.css">
+  <link rel="stylesheet" href="bank-brand.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
@@ -506,6 +507,10 @@
     <img src="icons/tuition.png" alt="Pay Tuition" style="width:40px; margin-bottom:10px;">
     <p>Pay Tuition</p>
   </div>
+  <div class="service-card" onclick="location.href='pay-loans.html'">
+    <img src="icons/loans.png" alt="Get Loans" style="width:40px; margin-bottom:10px;">
+    <p>Get A Loan</p>
+  </div>
   </div>
 
   <!-- Transaction Table with Load More -->
@@ -529,8 +534,12 @@
     <p id="endMessage" style="display:none; margin-top:10px; color:#555; font-style:italic;">To view transaction histories a year or older, kindly contact the bank.</p>
   </div>
 
-  <footer class="footer">
-    &copy; 2025 South International Bank. All rights reserved. | <a href="privacy.html" style="color:#555; text-decoration:underline;">Privacy Policy</a> | <a href="terms.html" style="color:#555; text-decoration:underline;">Terms of Use</a>
+  <footer class="bank-footer">
+    <div>&copy; 2025 South International Bank. All rights reserved.</div>
+    <nav class="bank-footer-links" aria-label="Legal links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+    </nav>
   </footer>
 
   <script>
