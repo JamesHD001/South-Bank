@@ -24,8 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================= */
 
 function initializeTransactionLock() {
-  // The lock applies to financial/action controls on the dashboard.
-  // It intentionally does not block Settings, Logout, or normal navigation.
   const actionLinks = document.querySelectorAll(".action-buttons a");
   const serviceCards = document.querySelectorAll(".service-card");
 
@@ -33,18 +31,42 @@ function initializeTransactionLock() {
 
   createTransactionLockModal();
 
-  actionLinks.forEach((link) => {
-    link.addEventListener("click", handleLockedActionClick);
-  });
+  // Use capture phase so inline onclick handlers such as
+  // location.href=... cannot navigate away before the lock modal appears.
+  document.addEventListener("click", handleLockedActionClick, true);
+}
 
-  serviceCards.forEach((card) => {
-    card.addEventListener("click", handleLockedActionClick);
-  });
+function isWithdrawalLocked() {
+  return sessionStorage.getItem("withdrawalLocked") === "true";
 }
 
 function handleLockedActionClick(event) {
+  if (!isWithdrawalLocked()) return;
+
+  const target = event.target;
+  const serviceCard = target.closest?.(".service-card");
+  const actionLink = target.closest?.(".action-buttons a");
+
+  // Every service/bill-payment card is restricted while the account is locked.
+  if (serviceCard) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    showTransactionLockModal();
+    return;
+  }
+
+  if (!actionLink) return;
+
+  // Receiving funds and making a deposit are still available.
+  const href = actionLink.getAttribute("href") || "";
+  const allowedActions = ["receive-form.html", "deposit-form.html"];
+
+  if (allowedActions.includes(href)) return;
+
   event.preventDefault();
   event.stopPropagation();
+  event.stopImmediatePropagation();
   showTransactionLockModal();
 }
 
@@ -72,13 +94,11 @@ function createTransactionLockModal() {
       <h2 id="transactionLockTitle">Transactions Locked</h2>
 
       <p class="transaction-lock-message">
-        Withdrawals and other account transactions are currently locked
-        for your account.
+        Withdrawals are locked for your account. Kindly visit the bank with your credentials to unfreeze your account!
       </p>
 
       <p class="transaction-lock-instruction">
-        Kindly visit the bank with your credentials and valid identification
-        documents to complete verification and unfreeze your account.
+        Transactions and bill payments are unavailable until the account restriction is cleared.
       </p>
 
       <div class="transaction-lock-actions">
