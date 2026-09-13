@@ -4,8 +4,8 @@ const crypto = require('node:crypto');
 
 const LOCK_MESSAGE = 'Withdrawals are locked for your account. Kindly visit the bank with your credentials to unfreeze your account!';
 const ACCOUNTS_FILE = path.join(process.cwd(), 'data', 'accounts.json');
+const SESSION_SECRET = process.env.SESSION_SECRET || 'local-south-bank-demo-secret-change-me';
 const accounts = new Map(Object.entries(JSON.parse(fs.readFileSync(ACCOUNTS_FILE, 'utf8'))));
-const sessions = new Map();
 
 function sendJson(res, status, body, headers = {}) {
   res.statusCode = status;
@@ -33,6 +33,12 @@ function readJson(req) {
   });
 }
 
+function createSessionToken(username) {
+  const payload = Buffer.from(JSON.stringify({ username }), 'utf8').toString('base64url');
+  const signature = crypto.createHmac('sha256', SESSION_SECRET).update(payload).digest('base64url');
+  return `${payload}.${signature}`;
+}
+
 function sessionUser(req) {
   const token = (req.headers.cookie || '')
     .split(';')
@@ -40,16 +46,30 @@ function sessionUser(req) {
     .find(value => value.startsWith('session='))
     ?.slice(8);
 
-  return token ? sessions.get(token) : undefined;
+  if (!token) return undefined;
+
+  const [payload, signature] = token.split('.');
+  if (!payload || !signature) return undefined;
+
+  const expected = crypto.createHmac('sha256', SESSION_SECRET).update(payload).digest('base64url');
+  const suppliedBuffer = Buffer.from(signature);
+  const expectedBuffer = Buffer.from(expected);
+
+  if (suppliedBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(suppliedBuffer, expectedBuffer)) {
+    return undefined;
+  }
+
+  try {
+    const parsed = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
+    return parsed?.username ? parsed : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 function isAdmin(req) {
   const expected = process.env.ADMIN_TOKEN;
   return Boolean(expected && req.headers.authorization === `Bearer ${expected}`);
-}
-
-function persistAccounts() {
-  fs.writeFileSync(ACCOUNTS_FILE, `${JSON.stringify(Object.fromEntries(accounts), null, 2)}\n`, 'utf8');
 }
 
 module.exports = async (req, res) => {
@@ -58,30 +78,25 @@ module.exports = async (req, res) => {
 
     if (req.method === 'POST' && requestPath === '/api/auth/login') {
       const body = await readJson(req);
-      const username = String(body.username || '');
+      const username = String(body.username || '').trim();
       const account = accounts.get(username);
 
       if (!account || account.password !== body.password) {
         return sendJson(res, 401, { error: 'Invalid Username or Password' });
       }
 
-      const token = crypto.randomBytes(32).toString('hex');
-      sessions.set(token, { username });
+      const token = createSessionToken(username);
 
-      return sendJson(res, 200, { authenticated: true }, {
+      return sendJson(res, 200, {
+        authenticated: true,
+        username,
+        withdrawalLocked: Boolean(account.withdrawalLocked)
+      }, {
         'Set-Cookie': `session=${token}; HttpOnly; Secure; SameSite=Lax; Path=/`
       });
     }
 
     if (req.method === 'POST' && requestPath === '/api/auth/logout') {
-      const cookie = (req.headers.cookie || '')
-        .split(';')
-        .map(value => value.trim())
-        .find(value => value.startsWith('session='))
-        ?.slice(8);
-
-      if (cookie) sessions.delete(cookie);
-
       res.statusCode = 204;
       res.setHeader('Set-Cookie', 'session=; Max-Age=0; HttpOnly; Secure; SameSite=Lax; Path=/');
       return res.end();
@@ -98,18 +113,9 @@ module.exports = async (req, res) => {
     if (req.method === 'PATCH' && requestPath.startsWith('/api/admin/accounts/') && requestPath.endsWith('/withdrawal-lock')) {
       if (!isAdmin(req)) return sendJson(res, 403, { error: 'Administrator authorization required' });
 
-      const username = decodeURIComponent(requestPath.slice('/api/admin/accounts/'.length, -'/withdrawal-lock'.length));
-      const account = accounts.get(username);
-      if (!account) return sendJson(res, 404, { error: 'Account not found' });
-
-      const body = await readJson(req);
-      if (typeof body.withdrawalLocked !== 'boolean') {
-        return sendJson(res, 400, { error: 'withdrawalLocked must be boolean' });
-      }
-
-      account.withdrawalLocked = body.withdrawalLocked;
-      persistAccounts();
-      return sendJson(res, 200, { username, withdrawalLocked: account.withdrawalLocked });
+      return sendJson(res, 501, {
+        error: 'Account lock changes are disabled on the Vercel demo deployment because its filesystem is read-only. Update the local account data and redeploy, or connect a persistent database.'
+      });
     }
 
     if (req.method === 'POST' && requestPath === '/api/withdrawals') {
