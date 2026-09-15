@@ -1,17 +1,16 @@
 {
-  "version": 2,
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/index.js"
+      "source": "/api/:path*",
+      "destination": "/api/index.js"
     },
     {
-      "src": "/",
-      "dest": "/bank/index.html"
+      "source": "/",
+      "destination": "/bank/index.html"
     },
     {
-      "src": "/(.*)",
-      "dest": "/bank/$1"
+      "source": "/:path*",
+      "destination": "/bank/:path*"
     }
   ]
 }
